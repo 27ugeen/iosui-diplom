@@ -12,7 +12,7 @@ class InfoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.title = "Информация"
+//        self.title = "Информация"
     }
     
 

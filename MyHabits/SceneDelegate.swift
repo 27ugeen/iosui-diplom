@@ -20,12 +20,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let tabBarController = UITabBarController()
         
-        let habitsNavVC = HabitsViewController()
+        let habitsVC = HabitsViewController()
+        habitsVC.title = "Привычки"
+        let InfoVC = InfoViewController()
+        InfoVC.title = "Информация"
+        
+        let habitsNavVC = UINavigationController(rootViewController: habitsVC)
         habitsNavVC.tabBarItem = UITabBarItem(title: habitsNavVC.title, image: UIImage(systemName: "rectangle.grid.1x2.fill"), tag: 0)
         
-        
-        
-        let InfoNavVC = InfoViewController()
+        let InfoNavVC = UINavigationController(rootViewController: InfoVC)
         InfoNavVC.tabBarItem = UITabBarItem(title: InfoNavVC.title, image: UIImage(systemName: "info.circle.fill"), tag: 1)
         
         tabBarController.viewControllers = [habitsNavVC, InfoNavVC]
