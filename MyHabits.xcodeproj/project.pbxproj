@@ -15,6 +15,8 @@
 		1133FBB126CEE951000B5680 /* HabitsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1133FBB026CEE951000B5680 /* HabitsStore.swift */; };
 		1133FBB426CEFBC5000B5680 /* HabitsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1133FBB326CEFBC5000B5680 /* HabitsViewController.swift */; };
 		1133FBB726CEFBE2000B5680 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1133FBB626CEFBE2000B5680 /* InfoViewController.swift */; };
+		1133FBB926D03E14000B5680 /* ProgressCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1133FBB826D03E14000B5680 /* ProgressCollectionViewCell.swift */; };
+		1133FBBB26D04056000B5680 /* HabitCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1133FBBA26D04056000B5680 /* HabitCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		1133FBB026CEE951000B5680 /* HabitsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsStore.swift; sourceTree = "<group>"; };
 		1133FBB326CEFBC5000B5680 /* HabitsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsViewController.swift; sourceTree = "<group>"; };
 		1133FBB626CEFBE2000B5680 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
+		1133FBB826D03E14000B5680 /* ProgressCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressCollectionViewCell.swift; sourceTree = "<group>"; };
+		1133FBBA26D04056000B5680 /* HabitCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +81,8 @@
 			isa = PBXGroup;
 			children = (
 				1133FBB326CEFBC5000B5680 /* HabitsViewController.swift */,
+				1133FBB826D03E14000B5680 /* ProgressCollectionViewCell.swift */,
+				1133FBBA26D04056000B5680 /* HabitCollectionViewCell.swift */,
 			);
 			name = Habits;
 			sourceTree = "<group>";
@@ -161,9 +167,11 @@
 				1133FBB126CEE951000B5680 /* HabitsStore.swift in Sources */,
 				1133FBA126CD7D07000B5680 /* ViewController.swift in Sources */,
 				1133FB9D26CD7D07000B5680 /* AppDelegate.swift in Sources */,
+				1133FBB926D03E14000B5680 /* ProgressCollectionViewCell.swift in Sources */,
 				1133FBB426CEFBC5000B5680 /* HabitsViewController.swift in Sources */,
 				1133FBB726CEFBE2000B5680 /* InfoViewController.swift in Sources */,
 				1133FB9F26CD7D07000B5680 /* SceneDelegate.swift in Sources */,
+				1133FBBB26D04056000B5680 /* HabitCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
