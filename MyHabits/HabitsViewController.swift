@@ -16,24 +16,36 @@ class HabitsViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = UIColor(rgb: 0xF2F2F7)
-
+        
         
         collectionView.register(ProgressCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: ProgressCollectionViewCell.self))
+        collectionView.register(HabitCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: HabitCollectionViewCell.self))
         
         collectionView.dataSource = self
         collectionView.delegate = self
         
         return collectionView
     }()
-
+    
+    //    private enum Section {
+    //        case progress, habbits, unknown
+    //
+    //        init(section: Int) {
+    //            switch section {
+    //            case 0: self = .progress
+    //            case 1: self = .habbits
+    //            default: self = .unknown
+    //            }
+    //        }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupView()
         setupConstraints()
         
-
-
+        
+        
     }
 }
 
@@ -62,19 +74,29 @@ extension HabitsViewController {
             collectionView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
         ]
         NSLayoutConstraint.activate(constraints)
-
+        
     }
 }
 
 extension HabitsViewController: UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        //        return self.tempStorage.count
+        return 2
+    }
+    
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        
         return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ProgressCollectionViewCell.self), for: indexPath) as! ProgressCollectionViewCell
-        
-        return cell
+        guard indexPath.section == 0 else {
+            return collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: HabitCollectionViewCell.self), for: indexPath) as! HabitCollectionViewCell
+        }
+        return collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ProgressCollectionViewCell.self), for: indexPath) as! ProgressCollectionViewCell
     }
 }
 
@@ -83,27 +105,39 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout {
         print("\(indexPath.section) \(indexPath.row)")
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let cellWidth: CGFloat = (collectionView.frame.width - 16 * 2)
+        let cellHeight: CGFloat
+        
+        indexPath.section == 0 ? (cellHeight = 60) : (cellHeight = 130)
+        
+        return CGSize(width: cellWidth, height: cellHeight)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        guard section == 0 else {
+            return UIEdgeInsets(top: 18, left: 0, bottom: 0, right: 0)
+        }
+        return UIEdgeInsets(top: 22, left: 0, bottom: 0, right: 0)
     }
 }
 
 
 extension UIColor {
-   convenience init(red: Int, green: Int, blue: Int) {
-       assert(red >= 0 && red <= 255, "Invalid red component")
-       assert(green >= 0 && green <= 255, "Invalid green component")
-       assert(blue >= 0 && blue <= 255, "Invalid blue component")
-
-       self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
-   }
-
-   convenience init(rgb: Int) {
-       self.init(
-           red: (rgb >> 16) & 0xFF,
-           green: (rgb >> 8) & 0xFF,
-           blue: rgb & 0xFF
-       )
-   }
+    convenience init(red: Int, green: Int, blue: Int) {
+        assert(red >= 0 && red <= 255, "Invalid red component")
+        assert(green >= 0 && green <= 255, "Invalid green component")
+        assert(blue >= 0 && blue <= 255, "Invalid blue component")
+        
+        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
+    }
+    
+    convenience init(rgb: Int) {
+        self.init(
+            red: (rgb >> 16) & 0xFF,
+            green: (rgb >> 8) & 0xFF,
+            blue: rgb & 0xFF
+        )
+    }
 }
 
