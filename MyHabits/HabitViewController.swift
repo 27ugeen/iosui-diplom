@@ -30,7 +30,7 @@ class HabitViewController: UIViewController {
         return label
     }()
     
-    let addHabitTextField: UITextField = {
+    var addHabitTextField: UITextField = {
         let text = UITextField()
         text.translatesAutoresizingMaskIntoConstraints = false
         text.font = UIFont.systemFont(ofSize: 17, weight: .regular)

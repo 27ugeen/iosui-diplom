@@ -24,7 +24,7 @@ class HabitDetailsViewController: UIViewController {
 
 extension HabitDetailsViewController {
     func setupTableView() {
-        let buttonEdit = UIBarButtonItem(title: "Править", style: .done, target: self, action: nil)
+        let buttonEdit = UIBarButtonItem(title: "Править", style: .done, target: self, action: #selector(editHabit))
         buttonEdit.tintColor = UIColor(rgb: 0xA116CC)
         
         self.navigationItem.setRightBarButtonItems([buttonEdit], animated: true)
@@ -35,6 +35,16 @@ extension HabitDetailsViewController {
         
         tableView.dataSource = self
         tableView.delegate = self
+    }
+    
+    @objc
+    private func editHabit() {
+        let habitVC = HabitViewController()
+        habitVC.title = "Править"
+        let habitNavVC = UINavigationController(rootViewController: habitVC)
+        habitNavVC.modalPresentationStyle = .fullScreen
+        habitNavVC.modalTransitionStyle = .flipHorizontal
+        self.present(habitNavVC, animated: true, completion: nil)
     }
 }
 

@@ -134,7 +134,7 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout {
         print("indexPathSection: \(indexPath.section) indexPathRow: \(indexPath.row)")
         print("indexPathItem: \(indexPath.item)")
         
-        let index = (indexPath.section, indexPath.row)
+       let index = (indexPath.section, indexPath.row)
         
         if index != (0, 0) {
             let habitDetailsVC = HabitDetailsViewController()
