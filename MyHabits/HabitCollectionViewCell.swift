@@ -48,14 +48,6 @@ class HabitCollectionViewCell: UICollectionViewCell {
         return image
     }()
     
-//    let areaView: UIView = {
-//        let view = UIView()
-//        view.translatesAutoresizingMaskIntoConstraints = false
-//        view.layer.cornerRadius = 8
-//        view.backgroundColor = .white
-//        return view
-//    }()
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -66,51 +58,13 @@ class HabitCollectionViewCell: UICollectionViewCell {
     }
 }
 
-//extension HabitCollectionViewCell {
-//    func setupViews() {
-//        contentView.translatesAutoresizingMaskIntoConstraints = false
-//
-//        contentView.addSubview(areaView)
-//
-//        areaView.addSubview(titleLable)
-//        areaView.addSubview(subtitleLable)
-//        areaView.addSubview(counterLable)
-//        areaView.addSubview(statusImageView)
-//
-//        let constraints = [
-//
-//            areaView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-//            areaView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 22),
-//            areaView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-//            areaView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-//            areaView.widthAnchor.constraint(equalToConstant: CGFloat(UIScreen.main.bounds.width) - 32),
-//            areaView.heightAnchor.constraint(equalToConstant: 130),
-//
-//            titleLable.leadingAnchor.constraint(equalTo: areaView.leadingAnchor, constant: 20),
-//            titleLable.topAnchor.constraint(equalTo: areaView.topAnchor, constant: 20),
-//
-//            subtitleLable.leadingAnchor.constraint(equalTo: areaView.leadingAnchor, constant: 20),
-//            subtitleLable.topAnchor.constraint(equalTo: titleLable.topAnchor, constant: 4),
-//
-//            counterLable.leadingAnchor.constraint(equalTo: areaView.leadingAnchor, constant: 20),
-//            counterLable.bottomAnchor.constraint(equalTo: areaView.bottomAnchor, constant: -20),
-//
-//            statusImageView.topAnchor.constraint(equalTo: areaView.topAnchor, constant: 46),
-//            statusImageView.trailingAnchor.constraint(equalTo: areaView.trailingAnchor, constant: -46),
-//            statusImageView.bottomAnchor.constraint(equalTo: areaView.bottomAnchor, constant: -46),
-//
-//        ]
-//        NSLayoutConstraint.activate(constraints)
-//    }
-//}
-
 extension HabitCollectionViewCell {
     func setupViews() {
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 8
-        
+
         contentView.addSubview(titleLable)
         contentView.addSubview(subtitleLable)
         contentView.addSubview(counterLable)
@@ -132,12 +86,12 @@ extension HabitCollectionViewCell {
             counterLable.topAnchor.constraint(equalTo: subtitleLable.bottomAnchor, constant: 30),
             counterLable.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
             counterLable.heightAnchor.constraint(equalToConstant: 18),
-
+            
             statusImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 46),
             statusImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),
             statusImageView.widthAnchor.constraint(equalToConstant: 36),
             statusImageView.heightAnchor.constraint(equalToConstant: 36),
-
+            
         ]
         NSLayoutConstraint.activate(constraints)
     }

@@ -36,10 +36,6 @@ class HabitViewController: UIViewController {
         text.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         text.tintColor = UIColor(rgb: 0x296DFF)
         text.placeholder = "Бегать по утрам, спать 8 часов и т.п."
-//        text.backgroundColor = .white
-//        text.layer.cornerRadius = 12
-//        text.layer.borderWidth = 1
-//        text.layer.borderColor = UIColor.black.cgColor
         text.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: text.frame.height))
         text.leftViewMode = .always
         return text
@@ -58,8 +54,6 @@ class HabitViewController: UIViewController {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .orange
-//        image.layer.borderWidth = 2
-//        image.layer.borderColor = UIColor.orange.cgColor
         view.layer.cornerRadius = 30 / 2
         view.clipsToBounds = true
         view.contentMode = .scaleAspectFill
@@ -96,23 +90,30 @@ class HabitViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
-        self.colorHabitView.addGestureRecognizer(tapGesture)
+        let tapGestureOnColorWheel = UITapGestureRecognizer(target: self, action: #selector(colorWheelTapped))
+        self.colorHabitView.addGestureRecognizer(tapGestureOnColorWheel)
+        
+
         
         setupView()
         setupConstraints()
 
-        
+//        let store = HabitsStore.shared.habits
+//        print(store[5].color, store[5].name, store[5].date)
     }
     
+
+    
     @objc
-    func viewTapped() {
+    func colorWheelTapped() {
         let colorPicker = UIColorPickerViewController()
         colorPicker.delegate = self
         colorPicker.selectedColor = .black
         colorPicker.title = "Select color"
         self.present(colorPicker, animated: true, completion: nil )
     }
+    
+   
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -173,9 +174,9 @@ extension HabitViewController {
     
     @objc
     private func saveHabit() {
-        let newHabit = Habit(name: "Выпить стакан воды перед завтраком",
-                             date: Date(),
-                             color: .systemRed)
+        let newHabit = Habit(name: addHabitTextField.text ?? "======",
+                             date: setHabitTimeDatePicker.date,
+                             color: colorHabitView.backgroundColor ?? .systemOrange)
         let store = HabitsStore.shared
         store.habits.append(newHabit)
         self.dismiss(animated: true, completion: nil)

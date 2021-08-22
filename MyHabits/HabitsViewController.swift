@@ -9,6 +9,8 @@ import UIKit
 
 class HabitsViewController: UIViewController {
     
+    let habits = HabitsStore.shared.habits
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -24,22 +26,30 @@ class HabitsViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         
+        
+        
         return collectionView
     }()
     
-    private var tempStorage: [HabitsStore] = [] {
-        didSet {
-            collectionView.reloadData()
-        }
-    }
+//    private var tempStorage: [HabitsStore] = [] {
+//        didSet {
+//            collectionView.reloadData()
+//        }
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupView()
         setupConstraints()
         
+//        let tapGestureOnView = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
+//        let cell = HabitCollectionViewCell()
+//        view.addGestureRecognizer(tapGestureOnView)
+        
     }
+    
+
 }
 
 extension HabitsViewController {
@@ -51,7 +61,16 @@ extension HabitsViewController {
         buttonAdd.tintColor = UIColor(rgb: 0xA116CC)
         
         self.navigationItem.setRightBarButtonItems([buttonAdd], animated: true)
+        
+        
+        
     }
+    
+//    @objc
+//    func viewTapped() {
+//        let habitDetailsVC = HabitDetailsViewController()
+//        navigationController?.pushViewController(habitDetailsVC, animated: true)
+//    }
     
     @objc
     private func addHabit() {
@@ -99,7 +118,12 @@ extension HabitsViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard indexPath.section == 0 else {
-            return collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: HabitCollectionViewCell.self), for: indexPath) as! HabitCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: HabitCollectionViewCell.self), for: indexPath) as! HabitCollectionViewCell
+//            let habits = HabitsStore.shared.habits
+            cell.titleLable.text = habits[indexPath.item].name
+            cell.subtitleLable.text = habits[indexPath.item].dateString
+            cell.statusImageView.layer.borderColor = habits[indexPath.item].color.cgColor
+            return cell
         }
         return collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ProgressCollectionViewCell.self), for: indexPath) as! ProgressCollectionViewCell
     }
@@ -107,8 +131,20 @@ extension HabitsViewController: UICollectionViewDataSource {
 
 extension HabitsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("\(indexPath.section) \(indexPath.row)")
+        print("indexPathSection: \(indexPath.section) indexPathRow: \(indexPath.row)")
+        print("indexPathItem: \(indexPath.item)")
+        
+        let index = (indexPath.section, indexPath.row)
+        
+        if index != (0, 0) {
+            let habitDetailsVC = HabitDetailsViewController()
+            habitDetailsVC.title = habits[indexPath.item].name
+            navigationController?.pushViewController(habitDetailsVC, animated: true)
+        }
+
+        
     }
+    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth: CGFloat = (collectionView.frame.width - 16 * 2)
