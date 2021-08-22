@@ -20,31 +20,24 @@ class HabitsViewController: UIViewController {
         
         collectionView.register(ProgressCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: ProgressCollectionViewCell.self))
         collectionView.register(HabitCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: HabitCollectionViewCell.self))
-        
+
         collectionView.dataSource = self
         collectionView.delegate = self
         
         return collectionView
     }()
     
-    //    private enum Section {
-    //        case progress, habbits, unknown
-    //
-    //        init(section: Int) {
-    //            switch section {
-    //            case 0: self = .progress
-    //            case 1: self = .habbits
-    //            default: self = .unknown
-    //            }
-    //        }
+    private var tempStorage: [HabitsStore] = [] {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupView()
         setupConstraints()
-        
-        
         
     }
 }
@@ -54,10 +47,20 @@ extension HabitsViewController {
         
         view.backgroundColor = UIColor(rgb: 0xFFFFFF)
         
-        let buttonAdd = UIBarButtonItem(image: UIImage(systemName: "plus"), style: UIBarButtonItem.Style.done, target: self, action: nil)
+        let buttonAdd = UIBarButtonItem(image: UIImage(systemName: "plus"), style: UIBarButtonItem.Style.done, target: self, action: #selector(addHabit))
         buttonAdd.tintColor = UIColor(rgb: 0xA116CC)
         
         self.navigationItem.setRightBarButtonItems([buttonAdd], animated: true)
+    }
+    
+    @objc
+    private func addHabit() {
+        let habitVC = HabitViewController()
+        habitVC.title = "Создать"
+        let habitNavVC = UINavigationController(rootViewController: habitVC)
+        habitNavVC.modalPresentationStyle = .fullScreen
+        habitNavVC.modalTransitionStyle = .flipHorizontal
+        self.present(habitNavVC, animated: true, completion: nil)
     }
 }
 
@@ -87,8 +90,10 @@ extension HabitsViewController: UICollectionViewDataSource {
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        
+        guard section == 0 else {
+            print(HabitsStore.shared.habits.count)
+            return HabitsStore.shared.habits.count
+        }
         return 1
     }
     
