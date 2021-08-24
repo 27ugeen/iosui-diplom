@@ -102,7 +102,6 @@ class HabitViewController: UIViewController {
 //        print(store[5].color, store[5].name, store[5].date)
     }
     
-
     
     @objc
     func colorWheelTapped() {
@@ -179,7 +178,13 @@ extension HabitViewController {
                              color: colorHabitView.backgroundColor ?? .systemOrange)
         let store = HabitsStore.shared
         store.habits.append(newHabit)
-        self.dismiss(animated: true, completion: nil)
+        
+        let habitsVC = HabitsViewController()
+        let habitsNavVC = UINavigationController(rootViewController: habitsVC)
+        habitsNavVC.modalPresentationStyle = .fullScreen
+        habitsNavVC.modalTransitionStyle = .flipHorizontal
+        self.present(habitsNavVC, animated: true, completion: nil)
+        
     }
     
     @objc

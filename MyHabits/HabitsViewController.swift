@@ -122,10 +122,19 @@ extension HabitsViewController: UICollectionViewDataSource {
 //            let habits = HabitsStore.shared.habits
             cell.titleLable.text = habits[indexPath.item].name
             cell.subtitleLable.text = habits[indexPath.item].dateString
-            cell.statusImageView.layer.borderColor = habits[indexPath.item].color.cgColor
+            cell.statusButton.tintColor = habits[indexPath.item].color
+            if habits[indexPath.item].isAlreadyTakenToday {
+                cell.statusButton.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+            } else {
+                cell.statusButton.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
+            }
             return cell
         }
-        return collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ProgressCollectionViewCell.self), for: indexPath) as! ProgressCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ProgressCollectionViewCell.self), for: indexPath) as! ProgressCollectionViewCell
+        
+        let store = HabitsStore.shared
+        cell.percentLable.text = "\(String(describing: store.todayProgress))%"
+        return cell
     }
 }
 

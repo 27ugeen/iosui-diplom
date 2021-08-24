@@ -31,7 +31,7 @@ class HabitDetailsTableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .white
-        label.text = "Вчера"
+//        label.text = "Вчера"
         return label
     }()
     
@@ -50,13 +50,14 @@ extension HabitDetailsTableViewCell {
 
     private func setupViews() {
         contentView.addSubview(dateLabel)
+        contentView.backgroundColor = .white
 
         let constraints = [
-            dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             dateLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
             dateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            dateLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor),
+//            dateLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor),
         ]
         NSLayoutConstraint.activate(constraints)
     }

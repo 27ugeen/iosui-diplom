@@ -72,7 +72,13 @@ extension HabitDetailsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! HabitDetailsTableViewCell
-        cell.dateLabel.text = String(describing: HabitsStore.shared.dates)
+        let date = HabitsStore.shared.habits[indexPath.item].date
+//        let today = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .none
+        dateFormatter.doesRelativeDateFormatting = true
+        cell.dateLabel.text = dateFormatter.string(from: date)
         return cell
     }
     
