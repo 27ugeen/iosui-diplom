@@ -9,11 +9,11 @@ import UIKit
 
 class HabitDetailsTableViewCell: UITableViewCell {
     
-    let dates = String(describing: HabitsStore.shared.dates)
+//    let dates = String(describing: HabitsStore.shared.dates)
     
-    var cellDate: HabitsStore? {
+    var habit: Habit? {
         didSet {
-            dateLabel.text = dates
+            dateLabel.text = String(describing: habit?.trackDates)
         }
     }
 

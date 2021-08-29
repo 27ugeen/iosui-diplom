@@ -10,17 +10,18 @@ import UIKit
 class HabitCollectionViewCell: UICollectionViewCell {
     
     let store = HabitsStore.shared
-//    var habit: [Habit]? {
-//        didSet {
-//            titleLable.text = store.habits[0].name
-//        }
-//    }
     
+    var habit: Habit? {
+        didSet {
+            titleLable.text = habit?.name
+            subtitleLable.text = habit?.dateString
+//            statusButton.backgroundColor = habit?.color
+        }
+    }
     
     let titleLable: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-//        label.text = "Test1"
         label.textColor = UIColor(rgb: 0x296DFF)
         label.font = UIFont.systemFont(ofSize: 17, weight: .medium)
         return label
@@ -48,7 +49,6 @@ class HabitCollectionViewCell: UICollectionViewCell {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
-        button.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .highlighted)
         button.addTarget(self, action: #selector(circleTapped), for: .touchUpInside)
         return button
     }()
@@ -56,6 +56,8 @@ class HabitCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
+        
+        
 //        layoutIfNeeded()
     }
     
@@ -65,16 +67,11 @@ class HabitCollectionViewCell: UICollectionViewCell {
     
     @objc
     func circleTapped() {
-//        let habit = Habit(name: titleLable.text ?? "", date: Date(), color: statusButton.tintColor)
-//
-//        if !habit.isAlreadyTakenToday {
-        store.track(Habit(name: titleLable.text ?? "", date: Date(), trackDates: [Date()], color: statusButton.tintColor))
+        if statusButton.currentBackgroundImage == UIImage(systemName: "circle") {
             statusButton.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-            print("circle tapped")
-//        } else {
-//            print("habit is already tracked!")
-//        }
-//        
+        } else {
+            print("button is already tupped")
+        }
     }
 }
 

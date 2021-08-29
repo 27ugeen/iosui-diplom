@@ -39,14 +39,6 @@ class ProgressCollectionViewCell: UICollectionViewCell {
         return image
     }()
     
-//    let areaView: UIView = {
-//        let view = UIView()
-//        view.translatesAutoresizingMaskIntoConstraints = false
-//        view.layer.cornerRadius = 8
-//        view.backgroundColor = .white
-//        return view
-//    }()
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -57,40 +49,6 @@ class ProgressCollectionViewCell: UICollectionViewCell {
     }
 }
 
-//extension ProgressCollectionViewCell {
-//    func setupViews() {
-//        contentView.translatesAutoresizingMaskIntoConstraints = false
-////        let cellWidth = UIScreen.main.bounds.width - 32
-//
-//        contentView.addSubview(areaView)
-//
-//        areaView.addSubview(titleLable)
-//        areaView.addSubview(percentLable)
-//        areaView.addSubview(progressImageView)
-//
-//        let constraints = [
-//
-//            areaView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-//            areaView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 22),
-//            areaView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-//            areaView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-//            areaView.widthAnchor.constraint(equalToConstant: CGFloat(UIScreen.main.bounds.width) - 32),
-//            areaView.heightAnchor.constraint(equalToConstant: 60),
-//
-//            titleLable.leadingAnchor.constraint(equalTo: areaView.leadingAnchor, constant: 12),
-//            titleLable.topAnchor.constraint(equalTo: areaView.topAnchor, constant: 10),
-//
-//            percentLable.topAnchor.constraint(equalTo: areaView.topAnchor, constant: 10),
-//            percentLable.trailingAnchor.constraint(equalTo: areaView.trailingAnchor, constant: -12),
-//
-//            progressImageView.leadingAnchor.constraint(equalTo: areaView.leadingAnchor, constant: 12),
-//            progressImageView.topAnchor.constraint(equalTo: titleLable.bottomAnchor, constant: 10),
-//            progressImageView.trailingAnchor.constraint(equalTo: areaView.trailingAnchor, constant: -12),
-//            progressImageView.bottomAnchor.constraint(equalTo: areaView.bottomAnchor, constant: -15),
-//        ]
-//        NSLayoutConstraint.activate(constraints)
-//    }
-//}
 
 extension ProgressCollectionViewCell {
     func setupViews() {

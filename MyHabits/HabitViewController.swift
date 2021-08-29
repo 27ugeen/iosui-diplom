@@ -8,6 +8,9 @@
 import UIKit
 
 class HabitViewController: UIViewController {
+    
+    let store = HabitsStore.shared
+        let habit = Habit.self
 
     let scrollView: UIScrollView = {
         let scroll = UIScrollView()
@@ -173,11 +176,22 @@ extension HabitViewController {
     
     @objc
     private func saveHabit() {
-        let newHabit = Habit(name: addHabitTextField.text ?? "======",
+        let newHabit = Habit(name: addHabitTextField.text ?? "",
                              date: setHabitTimeDatePicker.date,
                              color: colorHabitView.backgroundColor ?? .systemOrange)
-        let store = HabitsStore.shared
-        store.habits.append(newHabit)
+        
+        let oldHabit = store.habits.filter( {$0.name == addHabitTextField.text && $0.dateString == timeSubtitleHabitLabel.text && $0.color == colorHabitView.backgroundColor } )[0]
+//        print(oldHabit.date)
+        if case navigationController?.title = "Создать" {
+            store.habits.append(newHabit)
+        } else {
+            guard let indexOfHabit = store.habits.firstIndex(of: oldHabit) else {
+                return print("no such index!")
+            }
+            store.habits.remove(at: indexOfHabit)
+            store.habits.insert(newHabit, at: indexOfHabit)
+        }
+        
         
         let habitsVC = HabitsViewController()
         let habitsNavVC = UINavigationController(rootViewController: habitsVC)

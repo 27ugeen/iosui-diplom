@@ -9,6 +9,8 @@ import UIKit
 
 class HabitDetailsViewController: UIViewController {
     
+    let store = HabitsStore.shared
+    
     let tableView = UITableView(frame: .zero, style: .grouped)
     let cellID = String(describing: HabitDetailsTableViewCell.self)
     
@@ -24,10 +26,10 @@ class HabitDetailsViewController: UIViewController {
 
 extension HabitDetailsViewController {
     func setupTableView() {
-        let buttonEdit = UIBarButtonItem(title: "Править", style: .done, target: self, action: #selector(editHabit))
-        buttonEdit.tintColor = UIColor(rgb: 0xA116CC)
-        
-        self.navigationItem.setRightBarButtonItems([buttonEdit], animated: true)
+//        let buttonEdit = UIBarButtonItem(title: "Править", style: .done, target: self, action: #selector(editHabit))
+//        buttonEdit.tintColor = UIColor(rgb: 0xA116CC)
+//
+//        self.navigationItem.setRightBarButtonItems([buttonEdit], animated: true)
         
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -37,15 +39,21 @@ extension HabitDetailsViewController {
         tableView.delegate = self
     }
     
-    @objc
-    private func editHabit() {
-        let habitVC = HabitViewController()
-        habitVC.title = "Править"
-        let habitNavVC = UINavigationController(rootViewController: habitVC)
-        habitNavVC.modalPresentationStyle = .fullScreen
-        habitNavVC.modalTransitionStyle = .flipHorizontal
-        self.present(habitNavVC, animated: true, completion: nil)
-    }
+//    @objc
+//    private func editHabit(sender: UICollectionView) {
+//        let indexPath = sender.tag
+//        print(indexPath)
+//        
+//        let habitIndexPath = store.habits[indexPath].name
+//        print(habitIndexPath)
+//        
+//        let habitVC = HabitViewController()
+//        habitVC.title = "Править"
+//        let habitNavVC = UINavigationController(rootViewController: habitVC)
+//        habitNavVC.modalPresentationStyle = .fullScreen
+//        habitNavVC.modalTransitionStyle = .flipHorizontal
+//        self.present(habitNavVC, animated: true, completion: nil)
+//    }
 }
 
 extension HabitDetailsViewController {
@@ -73,18 +81,19 @@ extension HabitDetailsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! HabitDetailsTableViewCell
         let date = HabitsStore.shared.habits[indexPath.item].date
-//        let today = Date()
+        //        let today = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .none
         dateFormatter.doesRelativeDateFormatting = true
         cell.dateLabel.text = dateFormatter.string(from: date)
+        //        cell.tag = indexPath.item
         return cell
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let cell = HabitDetailsTableViewCell()
-
+        
         return cell.habitDetailsTitleLabel.text
     }
     
@@ -92,7 +101,7 @@ extension HabitDetailsViewController: UITableViewDataSource {
 
 extension HabitDetailsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
