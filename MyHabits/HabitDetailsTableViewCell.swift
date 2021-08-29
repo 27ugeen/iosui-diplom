@@ -11,11 +11,11 @@ class HabitDetailsTableViewCell: UITableViewCell {
     
 //    let dates = String(describing: HabitsStore.shared.dates)
     
-    var habit: Habit? {
-        didSet {
-            dateLabel.text = String(describing: habit?.trackDates)
-        }
-    }
+//    var habit: Habit? {
+//        didSet {
+//            dateLabel.text = String(describing: habit?.trackDates)
+//        }
+//    }
 
     var habitDetailsTitleLabel: UILabel = {
         let title = UILabel()
@@ -57,7 +57,6 @@ extension HabitDetailsTableViewCell {
             dateLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
             dateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-//            dateLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor),
         ]
         NSLayoutConstraint.activate(constraints)
     }

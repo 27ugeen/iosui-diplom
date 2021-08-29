@@ -19,6 +19,7 @@
 		1133FBBB26D04056000B5680 /* HabitCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1133FBBA26D04056000B5680 /* HabitCollectionViewCell.swift */; };
 		1139F06626D2A716009610F7 /* HabitDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1139F06526D2A716009610F7 /* HabitDetailsViewController.swift */; };
 		1139F06826D2D190009610F7 /* HabitDetailsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1139F06726D2D190009610F7 /* HabitDetailsTableViewCell.swift */; };
+		1139F06A26DBC19A009610F7 /* ColorSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1139F06926DBC19A009610F7 /* ColorSet.swift */; };
 		11E257ED26D2261300FC1B9A /* HabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E257EC26D2261300FC1B9A /* HabitViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +38,7 @@
 		1133FBBA26D04056000B5680 /* HabitCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCollectionViewCell.swift; sourceTree = "<group>"; };
 		1139F06526D2A716009610F7 /* HabitDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDetailsViewController.swift; sourceTree = "<group>"; };
 		1139F06726D2D190009610F7 /* HabitDetailsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDetailsTableViewCell.swift; sourceTree = "<group>"; };
+		1139F06926DBC19A009610F7 /* ColorSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSet.swift; sourceTree = "<group>"; };
 		11E257EC26D2261300FC1B9A /* HabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -74,6 +76,7 @@
 				1133FBB526CEFBCF000B5680 /* Info */,
 				1133FBB226CEFB63000B5680 /* Habits */,
 				1133FB9C26CD7D07000B5680 /* AppDelegate.swift */,
+				1139F06926DBC19A009610F7 /* ColorSet.swift */,
 				1133FB9E26CD7D07000B5680 /* SceneDelegate.swift */,
 				1133FBA026CD7D07000B5680 /* ViewController.swift */,
 				1133FBA526CD7D09000B5680 /* Assets.xcassets */,
@@ -185,6 +188,7 @@
 				1133FBA126CD7D07000B5680 /* ViewController.swift in Sources */,
 				1133FB9D26CD7D07000B5680 /* AppDelegate.swift in Sources */,
 				1133FBB926D03E14000B5680 /* ProgressCollectionViewCell.swift in Sources */,
+				1139F06A26DBC19A009610F7 /* ColorSet.swift in Sources */,
 				1133FBB426CEFBC5000B5680 /* HabitsViewController.swift in Sources */,
 				1133FBB726CEFBE2000B5680 /* InfoViewController.swift in Sources */,
 				1133FB9F26CD7D07000B5680 /* SceneDelegate.swift in Sources */,

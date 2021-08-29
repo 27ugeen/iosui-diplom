@@ -7,6 +7,8 @@
 
 import UIKit
 
+import Foundation
+
 class HabitDetailsViewController: UIViewController {
     
     let store = HabitsStore.shared
@@ -14,11 +16,11 @@ class HabitDetailsViewController: UIViewController {
     let tableView = UITableView(frame: .zero, style: .grouped)
     let cellID = String(describing: HabitDetailsTableViewCell.self)
     
+//    weak var indexPathDelegate: IndexPathDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = UIColor(rgb: 0xF2F2F7)
-        
+
         setupTableView()
         setupConstraints()
     }
@@ -26,10 +28,7 @@ class HabitDetailsViewController: UIViewController {
 
 extension HabitDetailsViewController {
     func setupTableView() {
-//        let buttonEdit = UIBarButtonItem(title: "Править", style: .done, target: self, action: #selector(editHabit))
-//        buttonEdit.tintColor = UIColor(rgb: 0xA116CC)
-//
-//        self.navigationItem.setRightBarButtonItems([buttonEdit], animated: true)
+        view.backgroundColor = UIColor(rgb: 0xF2F2F7)
         
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -38,22 +37,6 @@ extension HabitDetailsViewController {
         tableView.dataSource = self
         tableView.delegate = self
     }
-    
-//    @objc
-//    private func editHabit(sender: UICollectionView) {
-//        let indexPath = sender.tag
-//        print(indexPath)
-//        
-//        let habitIndexPath = store.habits[indexPath].name
-//        print(habitIndexPath)
-//        
-//        let habitVC = HabitViewController()
-//        habitVC.title = "Править"
-//        let habitNavVC = UINavigationController(rootViewController: habitVC)
-//        habitNavVC.modalPresentationStyle = .fullScreen
-//        habitNavVC.modalTransitionStyle = .flipHorizontal
-//        self.present(habitNavVC, animated: true, completion: nil)
-//    }
 }
 
 extension HabitDetailsViewController {
@@ -80,14 +63,20 @@ extension HabitDetailsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! HabitDetailsTableViewCell
-        let date = HabitsStore.shared.habits[indexPath.item].date
-        //        let today = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .none
-        dateFormatter.doesRelativeDateFormatting = true
-        cell.dateLabel.text = dateFormatter.string(from: date)
-        //        cell.tag = indexPath.item
+        
+        guard let dateString = store.trackDateString(forIndex: indexPath.row) else {
+            return cell
+        }
+        cell.dateLabel.text = dateString
+        
+//        let idx = indexPathDelegate?.sendIndexPath(sender: editButton)
+//        print(idx!)
+        
+//        if store.habit(currentHabit, isTrackedIn: currentDate) {
+//            cell.accessoryType = .checkmark
+//            cell.tintColor = buttonColor
+//        }
+        
         return cell
     }
     

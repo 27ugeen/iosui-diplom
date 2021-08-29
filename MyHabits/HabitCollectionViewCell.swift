@@ -11,13 +11,13 @@ class HabitCollectionViewCell: UICollectionViewCell {
     
     let store = HabitsStore.shared
     
-    var habit: Habit? {
-        didSet {
-            titleLable.text = habit?.name
-            subtitleLable.text = habit?.dateString
-//            statusButton.backgroundColor = habit?.color
-        }
-    }
+//    var habit: Habit? {
+//        didSet {
+//            titleLable.text = habit?.name
+//            subtitleLable.text = habit?.dateString
+////            statusButton.backgroundColor = habit?.color
+//        }
+//    }
     
     let titleLable: UILabel = {
         let label = UILabel()

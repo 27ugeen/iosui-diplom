@@ -7,53 +7,66 @@
 
 import UIKit
 
+//protocol IndexPathDelegate: AnyObject {
+//    func sendIndexPath(sender: UIBarButtonItem, indexPath: Int)
+//}
+
 class HabitsViewController: UIViewController {
     
     let store = HabitsStore.shared
-    //    let habit = Habit.self
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        //        layout.itemSize.width = .infinity
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = UIColor(rgb: 0xF2F2F7)
-        
         
         collectionView.register(ProgressCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: ProgressCollectionViewCell.self))
         collectionView.register(HabitCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: HabitCollectionViewCell.self))
         
         collectionView.dataSource = self
         collectionView.delegate = self
-        
-        
-        
+
         return collectionView
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.title = "Сегодня"
+        self.tabBarItem.title = "Привычки"
+        
         setupView()
         setupConstraints()
         
     }
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if let habitDetailsVC = segue.destination as? HabitDetailsViewController {
+//            habitDetailsVC.indexPathDelegate? = self
+//        }
+//    }
 }
-
+////====================================================
+//extension HabitsViewController: IndexPathDelegate {
+//    func sendIndexPath(sender: UIBarButtonItem, indexPath) {
+//        let indexPathItem = sender.tag
+//        print("MainVC \(indexPathItem)")
+//}
+////====================================================
 extension HabitsViewController {
     func setupView() {
-        
         view.backgroundColor = UIColor(rgb: 0xFFFFFF)
         
         let buttonAdd = UIBarButtonItem(image: UIImage(systemName: "plus"), style: UIBarButtonItem.Style.done, target: self, action: #selector(addHabit))
         buttonAdd.tintColor = UIColor(rgb: 0xA116CC)
         
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.navigationItem.title = "Сегодня"
+//        self.navigationController?.navigationItem.largeTitleDisplayMode = .always
         self.navigationItem.setRightBarButtonItems([buttonAdd], animated: true)
-        
-        
-        
     }
     
     @objc
@@ -69,8 +82,7 @@ extension HabitsViewController {
     @objc
     private func editHabit(sender: UIBarButtonItem) {
         let indexPathItem = sender.tag
-        print(indexPathItem)
-        
+
         let habitVC = HabitViewController()
         habitVC.title = "Править"
         
@@ -79,19 +91,25 @@ extension HabitsViewController {
         habitVC.addHabitTextField.text = habitIndexPath.name
         habitVC.colorHabitView.backgroundColor = habitIndexPath.color
         habitVC.timeSubtitleHabitLabel.text = habitIndexPath.dateString
+        
         let habitNavVC = UINavigationController(rootViewController: habitVC)
         habitNavVC.modalPresentationStyle = .fullScreen
-        habitNavVC.modalTransitionStyle = .flipHorizontal
+        habitNavVC.modalTransitionStyle = .coverVertical
         self.present(habitNavVC, animated: true, completion: nil)
     }
     
     @objc
     func circleTapped(sender: UIButton){
         let buttonIndex = sender.tag
-        //        print(buttonIndex)
+        
+        let progressView = ProgressCollectionViewCell()
+        
+        
         let currentHabit = store.habits[buttonIndex]
         if !currentHabit.isAlreadyTakenToday {
             store.track(currentHabit)
+            progressView.progressImageView.progress = store.todayProgress
+            collectionView.reloadData()
         } else {
             print("habit is already tracked!")
         }
@@ -125,8 +143,8 @@ extension HabitsViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard section == 0 else {
-            print(HabitsStore.shared.habits.count)
-            return HabitsStore.shared.habits.count
+            print("Habits count: \(store.habits.count)")
+            return store.habits.count
         }
         return 1
     }
@@ -138,7 +156,7 @@ extension HabitsViewController: UICollectionViewDataSource {
             cell.titleLable.text = store.habits[indexPath.item].name
             cell.subtitleLable.text = store.habits[indexPath.item].dateString
             cell.statusButton.tintColor = store.habits[indexPath.item].color
-            //            cell.tag = indexPath.item
+//            cell.tag = indexPath.item
             
             cell.statusButton.tag = indexPath.item
             cell.statusButton.addTarget(self, action: #selector(circleTapped), for: .touchUpInside)
@@ -153,7 +171,16 @@ extension HabitsViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ProgressCollectionViewCell.self), for: indexPath) as! ProgressCollectionViewCell
         
         let store = HabitsStore.shared
-        cell.percentLable.text = "\(String(describing: store.todayProgress))%"
+        cell.percentLable.text = "\(String(describing: Int(store.todayProgress * 100)))%"
+    
+//        let habitsCount = store.habits.count
+//
+//        let progressTotal = store.habits.count
+        
+        cell.progressImageView.setProgress( 0, animated: false)
+        
+        cell.progressImageView.progress = store.todayProgress
+        cell.progressImageView.progressTintColor = buttonColor
         
         return cell
     }
@@ -161,26 +188,28 @@ extension HabitsViewController: UICollectionViewDataSource {
 
 extension HabitsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("indexPathItem!: \(indexPath.item)")
+        print("indexPathItem: \(indexPath.item)")
+
+        let indexPathItem = (indexPath.section, indexPath.row)
         
-        //        let habitDetailVC = HabitDetailsViewController()
-        
-        
-        let index = (indexPath.section, indexPath.row)
-        
-        if index != (0, 0) {
+        if indexPathItem != (0, 0) {
             let habitDetailsVC = HabitDetailsViewController()
             let buttonEdit = UIBarButtonItem(title: "Править", style: .done, target: self, action: #selector(editHabit))
-            buttonEdit.tintColor = UIColor(rgb: 0xA116CC)
             buttonEdit.tag = indexPath.item
-            
             habitDetailsVC.navigationItem.setRightBarButtonItems([buttonEdit], animated: true)
-            
             habitDetailsVC.title = store.habits[indexPath.item].name
+            
+//            let habitDetailsTableViewCell = HabitDetailsTableViewCell()
+//
+//            let currentHabit = store.habits[indexPath.item]
+//            let date = store.habits[indexPath.item].date
+//            let isTrackedINDate = habitDetailsVC.store.habit(currentHabit, isTrackedIn: date)
+//
+//            habitDetailsTableViewCell.accessoryType = .checkmark
+            self.navigationController?.navigationBar.tintColor = UIColor(rgb: 0xA116CC)
             navigationController?.pushViewController(habitDetailsVC, animated: true)
         }
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth: CGFloat = (collectionView.frame.width - 16 * 2)
@@ -196,25 +225,6 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout {
             return UIEdgeInsets(top: 18, left: 16, bottom: 0, right: 16)
         }
         return UIEdgeInsets(top: 22, left: 16, bottom: 0, right: 16)
-    }
-}
-
-
-extension UIColor {
-    convenience init(red: Int, green: Int, blue: Int) {
-        assert(red >= 0 && red <= 255, "Invalid red component")
-        assert(green >= 0 && green <= 255, "Invalid green component")
-        assert(blue >= 0 && blue <= 255, "Invalid blue component")
-        
-        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
-    }
-    
-    convenience init(rgb: Int) {
-        self.init(
-            red: (rgb >> 16) & 0xFF,
-            green: (rgb >> 8) & 0xFF,
-            blue: rgb & 0xFF
-        )
     }
 }
 

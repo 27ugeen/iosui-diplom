@@ -8,9 +8,7 @@
 import UIKit
 
 class ProgressCollectionViewCell: UICollectionViewCell {
-    
-    
-    
+
     let titleLable: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -31,8 +29,8 @@ class ProgressCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    let progressImageView: UIImageView = {
-        let image = UIImageView()
+    let progressImageView: UIProgressView = {
+        let image = UIProgressView()
         image.translatesAutoresizingMaskIntoConstraints = false
         image.backgroundColor = UIColor(rgb: 0xD8D8D8)
         image.layer.cornerRadius = 5

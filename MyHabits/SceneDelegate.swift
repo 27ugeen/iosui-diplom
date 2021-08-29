@@ -22,6 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let habitsVC = HabitsViewController()
         habitsVC.title = "Привычки"
+        
         let InfoVC = InfoViewController()
         InfoVC.title = "Информация"
         

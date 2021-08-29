@@ -10,7 +10,6 @@ import UIKit
 class HabitViewController: UIViewController {
     
     let store = HabitsStore.shared
-        let habit = Habit.self
 
     let scrollView: UIScrollView = {
         let scroll = UIScrollView()
@@ -90,32 +89,24 @@ class HabitViewController: UIViewController {
         return date
     }()
     
+    let deleteHabitButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Удалить привычку", for: .normal)
+        button.setTitleColor(.red, for: .normal)
+        button.addTarget(self, action: #selector(setupAlert), for: .touchUpInside)
+        return button
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let tapGestureOnColorWheel = UITapGestureRecognizer(target: self, action: #selector(colorWheelTapped))
         self.colorHabitView.addGestureRecognizer(tapGestureOnColorWheel)
         
-
-        
         setupView()
         setupConstraints()
-
-//        let store = HabitsStore.shared.habits
-//        print(store[5].color, store[5].name, store[5].date)
     }
-    
-    
-    @objc
-    func colorWheelTapped() {
-        let colorPicker = UIColorPickerViewController()
-        colorPicker.delegate = self
-        colorPicker.selectedColor = .black
-        colorPicker.title = "Select color"
-        self.present(colorPicker, animated: true, completion: nil )
-    }
-    
-   
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -130,39 +121,17 @@ class HabitViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-    
-
-}
-
-extension HabitViewController: UIColorPickerViewControllerDelegate {
-    func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
-        self.colorHabitView.backgroundColor = viewController.selectedColor
-    }
-    
-    func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
-        print("view controller is dismissed")
-    }
-}
-
-private extension HabitViewController {
-    @objc
-    func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            scrollView.contentInset.bottom = keyboardSize.height
-            scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
-        }
-    }
-    
-    @objc
-    func keyboardWillHide(notification: NSNotification) {
-        scrollView.contentInset.bottom = .zero
-        scrollView.verticalScrollIndicatorInsets = .zero
-    }
 }
 
 extension HabitViewController {
     func setupView() {
         view.backgroundColor = UIColor(rgb: 0xFFFFFF)
+        
+        if case navigationController?.title = "Создать" {
+            deleteHabitButton.alpha = 0
+        } else {
+            deleteHabitButton.alpha = 1
+        }
         
         let buttonSave = UIBarButtonItem(title: "Сохранить", style: .done, target: self, action: #selector(saveHabit))
         let buttonCancel = UIBarButtonItem(title: "Отменить", style: .plain, target: self, action: #selector(cancelAdding))
@@ -175,23 +144,62 @@ extension HabitViewController {
     }
     
     @objc
+    func setupAlert() {
+        let currentHabit = store.habits.filter( {$0.dateString == timeSubtitleHabitLabel.text} )[0]
+        
+        let alert = UIAlertController(title: "Удалить привычку", message: "Вы хотите удалить привычку \"\(currentHabit.name)\" ?", preferredStyle: UIAlertController.Style.alert)
+        
+        alert.addAction(UIAlertAction(title: "Удалить", style: UIAlertAction.Style.destructive, handler: { action in
+            self.deleteHabit()
+        }))
+        alert.addAction(UIAlertAction(title: "Отмена", style: UIAlertAction.Style.cancel, handler: nil))
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    @objc
+    func colorWheelTapped() {
+        let colorPicker = UIColorPickerViewController()
+        colorPicker.delegate = self
+        colorPicker.selectedColor = colorHabitView.backgroundColor ?? .orange
+        colorPicker.isModalInPresentation = true
+        colorPicker.title = "Select color"
+        self.present(colorPicker, animated: true, completion: nil )
+    }
+    
+    @objc
+    func deleteHabit() {
+        let oldHabit = store.habits.filter( {$0.dateString == timeSubtitleHabitLabel.text} )[0]
+        guard let indexOfHabit = store.habits.firstIndex(of: oldHabit) else {
+            return print("no such index!")
+        }
+        store.habits.remove(at: indexOfHabit)
+        print("habit deleted")
+        
+        let habitsVC = HabitsViewController()
+        let habitsNavVC = UINavigationController(rootViewController: habitsVC)
+        habitsNavVC.modalPresentationStyle = .fullScreen
+        habitsNavVC.modalTransitionStyle = .flipHorizontal
+        self.present(habitsNavVC, animated: true, completion: nil)
+    }
+    
+    @objc
     private func saveHabit() {
         let newHabit = Habit(name: addHabitTextField.text ?? "",
                              date: setHabitTimeDatePicker.date,
                              color: colorHabitView.backgroundColor ?? .systemOrange)
         
-        let oldHabit = store.habits.filter( {$0.name == addHabitTextField.text && $0.dateString == timeSubtitleHabitLabel.text && $0.color == colorHabitView.backgroundColor } )[0]
-//        print(oldHabit.date)
         if case navigationController?.title = "Создать" {
             store.habits.append(newHabit)
         } else {
+            let oldHabit = store.habits.filter( {$0.dateString == timeSubtitleHabitLabel.text} )[0]
+            
             guard let indexOfHabit = store.habits.firstIndex(of: oldHabit) else {
                 return print("no such index!")
             }
             store.habits.remove(at: indexOfHabit)
             store.habits.insert(newHabit, at: indexOfHabit)
         }
-        
         
         let habitsVC = HabitsViewController()
         let habitsNavVC = UINavigationController(rootViewController: habitsVC)
@@ -220,6 +228,7 @@ extension HabitViewController {
         contentView.addSubview(timeTitleHabitLabel)
         contentView.addSubview(timeSubtitleHabitLabel)
         contentView.addSubview(setHabitTimeDatePicker)
+        contentView.addSubview(deleteHabitButton)
         
         let constraints = [
             scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -257,8 +266,39 @@ extension HabitViewController {
             setHabitTimeDatePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             setHabitTimeDatePicker.topAnchor.constraint(equalTo: timeSubtitleHabitLabel.bottomAnchor, constant: 15),
             setHabitTimeDatePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            setHabitTimeDatePicker.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            
+            deleteHabitButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            deleteHabitButton.topAnchor.constraint(equalTo: setHabitTimeDatePicker.bottomAnchor, constant: 240),
+            deleteHabitButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            deleteHabitButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -18),
+            deleteHabitButton.heightAnchor.constraint(equalToConstant: 22)
         ]
         NSLayoutConstraint.activate(constraints)
+    }
+}
+
+extension HabitViewController: UIColorPickerViewControllerDelegate {
+    func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
+        colorHabitView.backgroundColor = viewController.selectedColor
+    }
+    
+    func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
+        print("colorPickerViewcontroller is dismissed")
+    }
+}
+
+private extension HabitViewController {
+    @objc
+    func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            scrollView.contentInset.bottom = keyboardSize.height
+            scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
+        }
+    }
+    
+    @objc
+    func keyboardWillHide(notification: NSNotification) {
+        scrollView.contentInset.bottom = .zero
+        scrollView.verticalScrollIndicatorInsets = .zero
     }
 }
