@@ -9,6 +9,10 @@ import UIKit
 
 class HabitDetailsTableViewCell: UITableViewCell {
     
+    let store = HabitsStore.shared
+    
+    
+//    var habit: Habit?
 //    let dates = String(describing: HabitsStore.shared.dates)
     
 //    var habit: Habit? {
@@ -38,6 +42,8 @@ class HabitDetailsTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
+        
+        
     }
     
     required init?(coder: NSCoder) {

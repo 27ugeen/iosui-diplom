@@ -159,7 +159,10 @@ public final class HabitsStore {
         guard index < dates.count else {
             return nil
         }
-        return dateFormatter.string(from: dates[index])
+        
+        let sortedDates = dates.sorted { $0 > $1 }
+        
+        return dateFormatter.string(from: sortedDates[index])
     }
     
     /// Показывает, была ли затрекана привычка в переданную дату.

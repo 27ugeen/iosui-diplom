@@ -15,14 +15,40 @@ class HabitDetailsViewController: UIViewController {
     
     let tableView = UITableView(frame: .zero, style: .grouped)
     let cellID = String(describing: HabitDetailsTableViewCell.self)
+
+    var habit: Habit
     
-//    weak var indexPathDelegate: IndexPathDelegate?
+    init(habit: Habit) {
+        self.habit = habit
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        self.navigationController?.navigationBar.prefersLargeTitles = false
+        self.navigationController?.navigationItem.largeTitleDisplayMode = .never
+        
         setupTableView()
         setupConstraints()
+    }
+    
+    @objc private func editHabit() {
+        let habitVC = HabitViewController()
+        habitVC.title = "Править"
+
+        habitVC.addHabitTextField.text = habit.name
+        habitVC.colorHabitView.backgroundColor = habit.color
+        habitVC.timeSubtitleHabitLabel.text = habit.dateString
+        
+        let habitNavVC = UINavigationController(rootViewController: habitVC)
+        habitNavVC.modalPresentationStyle = .fullScreen
+        habitNavVC.modalTransitionStyle = .coverVertical
+        self.present(habitNavVC, animated: true, completion: nil)
     }
 }
 
@@ -34,6 +60,11 @@ extension HabitDetailsViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(HabitDetailsTableViewCell.self, forCellReuseIdentifier: cellID)
         
+        let buttonEdit = UIBarButtonItem(title: "Править", style: .done, target: self, action: #selector(editHabit))
+        
+        self.title = habit.name
+        self.navigationItem.setRightBarButtonItems([buttonEdit], animated: true)
+
         tableView.dataSource = self
         tableView.delegate = self
     }
@@ -57,42 +88,33 @@ extension HabitDetailsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return HabitsStore.shared.dates.count
+        return store.dates.count
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! HabitDetailsTableViewCell
+        let sortedDates = store.dates.sorted { $0 > $1 }
         
-        guard let dateString = store.trackDateString(forIndex: indexPath.row) else {
-            return cell
+        if let dateString = store.trackDateString(forIndex: indexPath.row) {
+            cell.dateLabel.text = dateString
         }
-        cell.dateLabel.text = dateString
         
-//        let idx = indexPathDelegate?.sendIndexPath(sender: editButton)
-//        print(idx!)
-        
-//        if store.habit(currentHabit, isTrackedIn: currentDate) {
-//            cell.accessoryType = .checkmark
-//            cell.tintColor = buttonColor
-//        }
-        
+        if store.habit(habit, isTrackedIn: sortedDates[indexPath.row]) {
+            cell.accessoryType = .checkmark
+            cell.tintColor = buttonColor
+        }
         return cell
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let cell = HabitDetailsTableViewCell()
-        
         return cell.habitDetailsTitleLabel.text
     }
     
 }
 
 extension HabitDetailsViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44
     }

@@ -7,10 +7,6 @@
 
 import UIKit
 
-//protocol IndexPathDelegate: AnyObject {
-//    func sendIndexPath(sender: UIBarButtonItem, indexPath: Int)
-//}
-
 class HabitsViewController: UIViewController {
     
     let store = HabitsStore.shared
@@ -35,43 +31,33 @@ class HabitsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupViews()
+        setupConstraints()
+        
+        collectionView.reloadData()
+
+    }
+}
+
+extension HabitsViewController {
+    func setupViews() {
+        view.backgroundColor = UIColor(rgb: 0xFFFFFF)
+        
         self.navigationItem.title = "Сегодня"
         self.tabBarItem.title = "Привычки"
         
-        setupView()
-        setupConstraints()
-        
-    }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if let habitDetailsVC = segue.destination as? HabitDetailsViewController {
-//            habitDetailsVC.indexPathDelegate? = self
-//        }
-//    }
-}
-////====================================================
-//extension HabitsViewController: IndexPathDelegate {
-//    func sendIndexPath(sender: UIBarButtonItem, indexPath) {
-//        let indexPathItem = sender.tag
-//        print("MainVC \(indexPathItem)")
-//}
-////====================================================
-extension HabitsViewController {
-    func setupView() {
-        view.backgroundColor = UIColor(rgb: 0xFFFFFF)
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.navigationItem.largeTitleDisplayMode = .always
         
         let buttonAdd = UIBarButtonItem(image: UIImage(systemName: "plus"), style: UIBarButtonItem.Style.done, target: self, action: #selector(addHabit))
         buttonAdd.tintColor = UIColor(rgb: 0xA116CC)
         
-        self.navigationController?.navigationBar.prefersLargeTitles = true
-        self.navigationController?.navigationItem.title = "Сегодня"
-//        self.navigationController?.navigationItem.largeTitleDisplayMode = .always
         self.navigationItem.setRightBarButtonItems([buttonAdd], animated: true)
     }
     
-    @objc
-    private func addHabit() {
+    @objc private func addHabit() {
         let habitVC = HabitViewController()
+        
         habitVC.title = "Создать"
         let habitNavVC = UINavigationController(rootViewController: habitVC)
         habitNavVC.modalPresentationStyle = .fullScreen
@@ -79,31 +65,28 @@ extension HabitsViewController {
         self.present(habitNavVC, animated: true, completion: nil)
     }
     
-    @objc
-    private func editHabit(sender: UIBarButtonItem) {
-        let indexPathItem = sender.tag
-
-        let habitVC = HabitViewController()
-        habitVC.title = "Править"
-        
-        let habitIndexPath = store.habits[indexPathItem]
-
-        habitVC.addHabitTextField.text = habitIndexPath.name
-        habitVC.colorHabitView.backgroundColor = habitIndexPath.color
-        habitVC.timeSubtitleHabitLabel.text = habitIndexPath.dateString
-        
-        let habitNavVC = UINavigationController(rootViewController: habitVC)
-        habitNavVC.modalPresentationStyle = .fullScreen
-        habitNavVC.modalTransitionStyle = .coverVertical
-        self.present(habitNavVC, animated: true, completion: nil)
-    }
+//    @objc private func editHabit(sender: UIBarButtonItem) {
+//        let indexPathItem = sender.tag
+//
+//        let habitVC = HabitViewController()
+//        habitVC.title = "Править"
+//
+//        let habitIndexPath = store.habits[indexPathItem]
+//
+//        habitVC.addHabitTextField.text = habitIndexPath.name
+//        habitVC.colorHabitView.backgroundColor = habitIndexPath.color
+//        habitVC.timeSubtitleHabitLabel.text = habitIndexPath.dateString
+//
+//        let habitNavVC = UINavigationController(rootViewController: habitVC)
+//        habitNavVC.modalPresentationStyle = .fullScreen
+//        habitNavVC.modalTransitionStyle = .coverVertical
+//        self.present(habitNavVC, animated: true, completion: nil)
+//    }
     
-    @objc
-    func circleTapped(sender: UIButton){
+    @objc func circleTapped(sender: UIButton){
         let buttonIndex = sender.tag
         
         let progressView = ProgressCollectionViewCell()
-        
         
         let currentHabit = store.habits[buttonIndex]
         if !currentHabit.isAlreadyTakenToday {
@@ -113,13 +96,12 @@ extension HabitsViewController {
         } else {
             print("habit is already tracked!")
         }
-        print(currentHabit.isAlreadyTakenToday)
+        print("currentHabit.isAlreadyTakenToday: \(currentHabit.isAlreadyTakenToday)")
     }
 }
 
 extension HabitsViewController {
     func setupConstraints() {
-        
         view.addSubview(collectionView)
         
         let constraints = [
@@ -130,16 +112,13 @@ extension HabitsViewController {
             //            collectionView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
         ]
         NSLayoutConstraint.activate(constraints)
-        
     }
 }
 
 extension HabitsViewController: UICollectionViewDataSource {
-    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard section == 0 else {
@@ -156,7 +135,7 @@ extension HabitsViewController: UICollectionViewDataSource {
             cell.titleLable.text = store.habits[indexPath.item].name
             cell.subtitleLable.text = store.habits[indexPath.item].dateString
             cell.statusButton.tintColor = store.habits[indexPath.item].color
-//            cell.tag = indexPath.item
+            cell.tag = indexPath.item
             
             cell.statusButton.tag = indexPath.item
             cell.statusButton.addTarget(self, action: #selector(circleTapped), for: .touchUpInside)
@@ -172,13 +151,8 @@ extension HabitsViewController: UICollectionViewDataSource {
         
         let store = HabitsStore.shared
         cell.percentLable.text = "\(String(describing: Int(store.todayProgress * 100)))%"
-    
-//        let habitsCount = store.habits.count
-//
-//        let progressTotal = store.habits.count
         
         cell.progressImageView.setProgress( 0, animated: false)
-        
         cell.progressImageView.progress = store.todayProgress
         cell.progressImageView.progressTintColor = buttonColor
         
@@ -193,19 +167,12 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout {
         let indexPathItem = (indexPath.section, indexPath.row)
         
         if indexPathItem != (0, 0) {
-            let habitDetailsVC = HabitDetailsViewController()
-            let buttonEdit = UIBarButtonItem(title: "Править", style: .done, target: self, action: #selector(editHabit))
-            buttonEdit.tag = indexPath.item
-            habitDetailsVC.navigationItem.setRightBarButtonItems([buttonEdit], animated: true)
-            habitDetailsVC.title = store.habits[indexPath.item].name
+            let habitDetailsVC = HabitDetailsViewController(habit: store.habits[indexPath.item])
             
-//            let habitDetailsTableViewCell = HabitDetailsTableViewCell()
-//
-//            let currentHabit = store.habits[indexPath.item]
-//            let date = store.habits[indexPath.item].date
-//            let isTrackedINDate = habitDetailsVC.store.habit(currentHabit, isTrackedIn: date)
-//
-//            habitDetailsTableViewCell.accessoryType = .checkmark
+//            let buttonEdit = UIBarButtonItem(title: "Править", style: .done, target: self, action: #selector(editHabit))
+//            buttonEdit.tag = indexPath.item
+//            habitDetailsVC.navigationItem.setRightBarButtonItems([buttonEdit], animated: true)
+
             self.navigationController?.navigationBar.tintColor = UIColor(rgb: 0xA116CC)
             navigationController?.pushViewController(habitDetailsVC, animated: true)
         }
