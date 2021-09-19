@@ -11,12 +11,8 @@ class HabitViewController: UIViewController {
     
     let store = HabitsStore.shared
     
-        var habit: Habit? {
-            didSet {
-                
-            }
-        }
-
+    var currentHabit: Habit
+    
     let scrollView: UIScrollView = {
         let scroll = UIScrollView()
         scroll.translatesAutoresizingMaskIntoConstraints = false
@@ -38,7 +34,7 @@ class HabitViewController: UIViewController {
         return label
     }()
     
-    var addHabitTextField: UITextField = {
+    let addHabitTextField: UITextField = {
         let text = UITextField()
         text.translatesAutoresizingMaskIntoConstraints = false
         text.font = UIFont.systemFont(ofSize: 17, weight: .regular)
@@ -61,7 +57,7 @@ class HabitViewController: UIViewController {
     let colorHabitView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-//        view.backgroundColor = .orange
+        view.backgroundColor = .orange
         view.layer.cornerRadius = 30 / 2
         view.clipsToBounds = true
         view.contentMode = .scaleAspectFill
@@ -80,7 +76,7 @@ class HabitViewController: UIViewController {
     let timeSubtitleHabitLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-//        label.text = "Каждый день в"
+        label.text = "Каждый день в "
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         label.textColor = UIColor(rgb: 0x000000)
         return label
@@ -90,8 +86,16 @@ class HabitViewController: UIViewController {
         let date = UIDatePicker()
         date.translatesAutoresizingMaskIntoConstraints = false
         date.datePickerMode = .countDownTimer
-        date.locale = Locale(identifier: "en_US")
+        date.date = Date()
         return date
+    }()
+    
+    let timeHabitLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.textColor = buttonColor
+        return label
     }()
     
     let deleteHabitButton: UIButton = {
@@ -102,6 +106,15 @@ class HabitViewController: UIViewController {
         button.addTarget(self, action: #selector(setupAlert), for: .touchUpInside)
         return button
     }()
+    
+    init(habit: Habit) {
+        self.currentHabit = habit
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -132,7 +145,7 @@ extension HabitViewController {
     func setupView() {
         view.backgroundColor = UIColor(rgb: 0xFFFFFF)
         
-        if case navigationController?.title = "Создать" {
+        if (addHabitTextField.text?.isEmpty ?? false) {
             deleteHabitButton.alpha = 0
         } else {
             deleteHabitButton.alpha = 1
@@ -149,8 +162,6 @@ extension HabitViewController {
     }
     
     @objc func setupAlert() {
-        let currentHabit = store.habits.filter( {$0.dateString == timeSubtitleHabitLabel.text} )[0]
-        
         let alert = UIAlertController(title: "Удалить привычку", message: "Вы хотите удалить привычку \"\(currentHabit.name)\" ?", preferredStyle: UIAlertController.Style.alert)
         
         alert.addAction(UIAlertAction(title: "Удалить", style: UIAlertAction.Style.destructive, handler: { action in
@@ -171,8 +182,7 @@ extension HabitViewController {
     }
     
     @objc func deleteHabit() {
-        let oldHabit = store.habits.filter( {$0.dateString == timeSubtitleHabitLabel.text} )[0]
-        guard let indexOfHabit = store.habits.firstIndex(of: oldHabit) else {
+        guard let indexOfHabit = store.habits.firstIndex(of: currentHabit) else {
             return print("no such index!")
         }
         store.habits.remove(at: indexOfHabit)
@@ -186,16 +196,24 @@ extension HabitViewController {
     }
     
     @objc private func saveHabit() {
-        let newHabit = Habit(name: addHabitTextField.text ?? "",
+        let newHabit = Habit(name: addHabitTextField.text ?? "No name",
                              date: setHabitTimeDatePicker.date,
                              color: colorHabitView.backgroundColor ?? .systemOrange)
         
-        if case navigationController?.title = "Создать" {
+        let isEmptyHabitName = addHabitTextField.text?.isEmpty ?? false
+        
+        if isEmptyHabitName {
+            let alert = UIAlertController(title: "Внимание!", message: "Внесите название привычки!", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            
+            return
+        }
+        
+        if !store.habits.contains(newHabit) && deleteHabitButton.alpha == 0 {
             store.habits.append(newHabit)
         } else {
-            let oldHabit = store.habits.filter( {$0.dateString == timeSubtitleHabitLabel.text} )[0]
-            
-            guard let indexOfHabit = store.habits.firstIndex(of: oldHabit) else {
+            guard let indexOfHabit = store.habits.firstIndex(of: currentHabit) else {
                 return print("no such index!")
             }
             store.habits.remove(at: indexOfHabit)
@@ -206,8 +224,8 @@ extension HabitViewController {
         let habitsNavVC = UINavigationController(rootViewController: habitsVC)
         habitsNavVC.modalPresentationStyle = .fullScreen
         habitsNavVC.modalTransitionStyle = .flipHorizontal
-        self.present(habitsNavVC, animated: true, completion: nil)
         
+        self.present(habitsNavVC, animated: true, completion: nil)
     }
     
     @objc private func cancelAdding() {
@@ -228,6 +246,7 @@ extension HabitViewController {
         contentView.addSubview(timeTitleHabitLabel)
         contentView.addSubview(timeSubtitleHabitLabel)
         contentView.addSubview(setHabitTimeDatePicker)
+        contentView.addSubview(timeHabitLabel)
         contentView.addSubview(deleteHabitButton)
         
         let constraints = [
@@ -262,6 +281,9 @@ extension HabitViewController {
             
             timeSubtitleHabitLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             timeSubtitleHabitLabel.topAnchor.constraint(equalTo: timeTitleHabitLabel.bottomAnchor, constant: 7),
+            
+            timeHabitLabel.leadingAnchor.constraint(equalTo: timeSubtitleHabitLabel.trailingAnchor),
+            timeHabitLabel.topAnchor.constraint(equalTo: timeTitleHabitLabel.bottomAnchor, constant: 7),
             
             setHabitTimeDatePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             setHabitTimeDatePicker.topAnchor.constraint(equalTo: timeSubtitleHabitLabel.bottomAnchor, constant: 15),

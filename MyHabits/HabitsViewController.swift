@@ -35,7 +35,6 @@ class HabitsViewController: UIViewController {
         setupConstraints()
         
         collectionView.reloadData()
-
     }
 }
 
@@ -50,13 +49,13 @@ extension HabitsViewController {
         self.navigationController?.navigationItem.largeTitleDisplayMode = .always
         
         let buttonAdd = UIBarButtonItem(image: UIImage(systemName: "plus"), style: UIBarButtonItem.Style.done, target: self, action: #selector(addHabit))
-        buttonAdd.tintColor = UIColor(rgb: 0xA116CC)
+        buttonAdd.tintColor = buttonColor
         
         self.navigationItem.setRightBarButtonItems([buttonAdd], animated: true)
     }
     
     @objc private func addHabit() {
-        let habitVC = HabitViewController()
+        let habitVC = HabitViewController(habit: Habit.init(name: "", date: Date(), color: .systemOrange))
         
         habitVC.title = "Создать"
         let habitNavVC = UINavigationController(rootViewController: habitVC)
@@ -64,24 +63,6 @@ extension HabitsViewController {
         habitNavVC.modalTransitionStyle = .coverVertical
         self.present(habitNavVC, animated: true, completion: nil)
     }
-    
-//    @objc private func editHabit(sender: UIBarButtonItem) {
-//        let indexPathItem = sender.tag
-//
-//        let habitVC = HabitViewController()
-//        habitVC.title = "Править"
-//
-//        let habitIndexPath = store.habits[indexPathItem]
-//
-//        habitVC.addHabitTextField.text = habitIndexPath.name
-//        habitVC.colorHabitView.backgroundColor = habitIndexPath.color
-//        habitVC.timeSubtitleHabitLabel.text = habitIndexPath.dateString
-//
-//        let habitNavVC = UINavigationController(rootViewController: habitVC)
-//        habitNavVC.modalPresentationStyle = .fullScreen
-//        habitNavVC.modalTransitionStyle = .coverVertical
-//        self.present(habitNavVC, animated: true, completion: nil)
-//    }
     
     @objc func circleTapped(sender: UIButton){
         let buttonIndex = sender.tag
@@ -95,6 +76,9 @@ extension HabitsViewController {
             collectionView.reloadData()
         } else {
             print("habit is already tracked!")
+            let alert = UIAlertController(title: "Внимание!", message: "Привычка \(currentHabit.name) сегодня уже выполнена!", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
         print("currentHabit.isAlreadyTakenToday: \(currentHabit.isAlreadyTakenToday)")
     }
@@ -108,8 +92,7 @@ extension HabitsViewController {
             collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            //            collectionView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ]
         NSLayoutConstraint.activate(constraints)
     }
@@ -129,14 +112,24 @@ extension HabitsViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard indexPath.section == 0 else {
+        
+        switch indexPath.section {
+        case 0:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ProgressCollectionViewCell.self), for: indexPath) as! ProgressCollectionViewCell
+            
+            let store = HabitsStore.shared
+            cell.percentLable.text = "\(String(describing: Int(store.todayProgress * 100)))%"
+            cell.progressImageView.setProgress( 0, animated: false)
+            cell.progressImageView.progress = store.todayProgress
+            cell.progressImageView.progressTintColor = buttonColor
+            
+            return cell
+        default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: HabitCollectionViewCell.self), for: indexPath) as! HabitCollectionViewCell
             
             cell.titleLable.text = store.habits[indexPath.item].name
             cell.subtitleLable.text = store.habits[indexPath.item].dateString
             cell.statusButton.tintColor = store.habits[indexPath.item].color
-            cell.tag = indexPath.item
-            
             cell.statusButton.tag = indexPath.item
             cell.statusButton.addTarget(self, action: #selector(circleTapped), for: .touchUpInside)
             
@@ -147,16 +140,6 @@ extension HabitsViewController: UICollectionViewDataSource {
             }
             return cell
         }
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ProgressCollectionViewCell.self), for: indexPath) as! ProgressCollectionViewCell
-        
-        let store = HabitsStore.shared
-        cell.percentLable.text = "\(String(describing: Int(store.todayProgress * 100)))%"
-        
-        cell.progressImageView.setProgress( 0, animated: false)
-        cell.progressImageView.progress = store.todayProgress
-        cell.progressImageView.progressTintColor = buttonColor
-        
-        return cell
     }
 }
 
@@ -168,12 +151,8 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout {
         
         if indexPathItem != (0, 0) {
             let habitDetailsVC = HabitDetailsViewController(habit: store.habits[indexPath.item])
-            
-//            let buttonEdit = UIBarButtonItem(title: "Править", style: .done, target: self, action: #selector(editHabit))
-//            buttonEdit.tag = indexPath.item
-//            habitDetailsVC.navigationItem.setRightBarButtonItems([buttonEdit], animated: true)
 
-            self.navigationController?.navigationBar.tintColor = UIColor(rgb: 0xA116CC)
+            self.navigationController?.navigationBar.tintColor = buttonColor
             navigationController?.pushViewController(habitDetailsVC, animated: true)
         }
     }

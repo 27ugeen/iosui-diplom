@@ -7,19 +7,17 @@
 
 import UIKit
 
-import Foundation
-
 class HabitDetailsViewController: UIViewController {
     
     let store = HabitsStore.shared
     
     let tableView = UITableView(frame: .zero, style: .grouped)
     let cellID = String(describing: HabitDetailsTableViewCell.self)
-
-    var habit: Habit
+    
+    var currentHabit: Habit
     
     init(habit: Habit) {
-        self.habit = habit
+        self.currentHabit = habit
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -38,12 +36,13 @@ class HabitDetailsViewController: UIViewController {
     }
     
     @objc private func editHabit() {
-        let habitVC = HabitViewController()
+        let habitVC = HabitViewController(habit: currentHabit)
         habitVC.title = "Править"
-
-        habitVC.addHabitTextField.text = habit.name
-        habitVC.colorHabitView.backgroundColor = habit.color
-        habitVC.timeSubtitleHabitLabel.text = habit.dateString
+        
+        habitVC.addHabitTextField.text = currentHabit.name
+        habitVC.colorHabitView.backgroundColor = currentHabit.color
+        habitVC.timeHabitLabel.text = String(currentHabit.dateString.dropFirst(14))
+        habitVC.setHabitTimeDatePicker.date = currentHabit.date
         
         let habitNavVC = UINavigationController(rootViewController: habitVC)
         habitNavVC.modalPresentationStyle = .fullScreen
@@ -62,9 +61,9 @@ extension HabitDetailsViewController {
         
         let buttonEdit = UIBarButtonItem(title: "Править", style: .done, target: self, action: #selector(editHabit))
         
-        self.title = habit.name
+        self.title = currentHabit.name
         self.navigationItem.setRightBarButtonItems([buttonEdit], animated: true)
-
+        
         tableView.dataSource = self
         tableView.delegate = self
     }
@@ -100,7 +99,7 @@ extension HabitDetailsViewController: UITableViewDataSource {
             cell.dateLabel.text = dateString
         }
         
-        if store.habit(habit, isTrackedIn: sortedDates[indexPath.row]) {
+        if store.habit(currentHabit, isTrackedIn: sortedDates[indexPath.row]) {
             cell.accessoryType = .checkmark
             cell.tintColor = buttonColor
         }

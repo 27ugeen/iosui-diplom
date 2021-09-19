@@ -11,14 +11,6 @@ class HabitCollectionViewCell: UICollectionViewCell {
     
     let store = HabitsStore.shared
     
-//    var habit: Habit? {
-//        didSet {
-//            titleLable.text = habit?.name
-//            subtitleLable.text = habit?.dateString
-////            statusButton.backgroundColor = habit?.color
-//        }
-//    }
-    
     let titleLable: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -30,7 +22,6 @@ class HabitCollectionViewCell: UICollectionViewCell {
     let subtitleLable: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-//        label.text = "Каждый день в 7:30"
         label.textColor = .systemGray2
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         return label
@@ -56,17 +47,13 @@ class HabitCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
-        
-        
-//        layoutIfNeeded()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc
-    func circleTapped() {
+    @objc func circleTapped() {
         if statusButton.currentBackgroundImage == UIImage(systemName: "circle") {
             statusButton.setBackgroundImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
         } else {

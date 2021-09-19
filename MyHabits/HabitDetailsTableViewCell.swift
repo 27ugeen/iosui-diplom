@@ -9,18 +9,6 @@ import UIKit
 
 class HabitDetailsTableViewCell: UITableViewCell {
     
-    let store = HabitsStore.shared
-    
-    
-//    var habit: Habit?
-//    let dates = String(describing: HabitsStore.shared.dates)
-    
-//    var habit: Habit? {
-//        didSet {
-//            dateLabel.text = String(describing: habit?.trackDates)
-//        }
-//    }
-
     var habitDetailsTitleLabel: UILabel = {
         let title = UILabel()
         title.translatesAutoresizingMaskIntoConstraints = false
@@ -35,29 +23,26 @@ class HabitDetailsTableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .white
-//        label.text = "Вчера"
         return label
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
-        
-        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
 }
 
 extension HabitDetailsTableViewCell {
-
+    
     private func setupViews() {
         contentView.addSubview(dateLabel)
         contentView.backgroundColor = .white
-
+        
         let constraints = [
             dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             dateLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
