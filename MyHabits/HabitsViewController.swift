@@ -24,18 +24,35 @@ class HabitsViewController: UIViewController {
         
         collectionView.dataSource = self
         collectionView.delegate = self
-
+        
         return collectionView
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always
+        
         setupViews()
         setupConstraints()
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+//        print("willAppear")
+//        self.navigationController?.navigationBar.prefersLargeTitles = true
+
+        navigationController?.forceUpdateNavBar()
+        
         collectionView.reloadData()
     }
+    
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        self.navigationController?.navigationBar.prefersLargeTitles = false
+//    }
 }
 
 extension HabitsViewController {
@@ -45,13 +62,14 @@ extension HabitsViewController {
         self.navigationItem.title = "Сегодня"
         self.tabBarItem.title = "Привычки"
         
-        self.navigationController?.navigationBar.prefersLargeTitles = true
-        self.navigationController?.navigationItem.largeTitleDisplayMode = .always
+        
         
         let buttonAdd = UIBarButtonItem(image: UIImage(systemName: "plus"), style: UIBarButtonItem.Style.done, target: self, action: #selector(addHabit))
         buttonAdd.tintColor = buttonColor
         
         self.navigationItem.setRightBarButtonItems([buttonAdd], animated: true)
+        
+        collectionView.reloadData()
     }
     
     @objc private func addHabit() {
@@ -60,7 +78,6 @@ extension HabitsViewController {
         habitVC.title = "Создать"
         let habitNavVC = UINavigationController(rootViewController: habitVC)
         habitNavVC.modalPresentationStyle = .fullScreen
-        habitNavVC.modalTransitionStyle = .coverVertical
         self.present(habitNavVC, animated: true, completion: nil)
     }
     
@@ -80,7 +97,7 @@ extension HabitsViewController {
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
-        print("currentHabit.isAlreadyTakenToday: \(currentHabit.isAlreadyTakenToday)")
+        print("Current habit \(currentHabit.name) isAlreadyTakenToday: \(currentHabit.isAlreadyTakenToday)")
     }
 }
 
@@ -131,6 +148,8 @@ extension HabitsViewController: UICollectionViewDataSource {
             cell.subtitleLable.text = store.habits[indexPath.item].dateString
             cell.statusButton.tintColor = store.habits[indexPath.item].color
             cell.statusButton.tag = indexPath.item
+            
+            cell.counterNumber.text = String(describing: store.habits[indexPath.item].trackDates.count)
             cell.statusButton.addTarget(self, action: #selector(circleTapped), for: .touchUpInside)
             
             if store.habits[indexPath.item].isAlreadyTakenToday {
@@ -146,12 +165,12 @@ extension HabitsViewController: UICollectionViewDataSource {
 extension HabitsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("indexPathItem: \(indexPath.item)")
-
+        
         let indexPathItem = (indexPath.section, indexPath.row)
         
         if indexPathItem != (0, 0) {
             let habitDetailsVC = HabitDetailsViewController(habit: store.habits[indexPath.item])
-
+            
             self.navigationController?.navigationBar.tintColor = buttonColor
             navigationController?.pushViewController(habitDetailsVC, animated: true)
         }
@@ -174,3 +193,10 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+extension UINavigationController {
+    func forceUpdateNavBar() {
+        DispatchQueue.main.async {
+            self.navigationBar.sizeToFit()
+        }
+      }
+}

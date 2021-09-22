@@ -8,7 +8,7 @@
 import UIKit
 
 class ProgressCollectionViewCell: UICollectionViewCell {
-
+    
     let titleLable: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -54,7 +54,7 @@ extension ProgressCollectionViewCell {
         
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 8
-
+        
         contentView.addSubview(titleLable)
         contentView.addSubview(percentLable)
         contentView.addSubview(progressImageView)
@@ -66,12 +66,12 @@ extension ProgressCollectionViewCell {
             titleLable.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
             titleLable.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             titleLable.heightAnchor.constraint(equalToConstant: 18),
-
-
+            
+            
             percentLable.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             percentLable.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
             percentLable.heightAnchor.constraint(equalToConstant: 18),
-
+            
             progressImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
             progressImageView.topAnchor.constraint(equalTo: titleLable.bottomAnchor, constant: 10),
             progressImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),

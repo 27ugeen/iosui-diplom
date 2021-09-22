@@ -82,20 +82,20 @@ class HabitViewController: UIViewController {
         return label
     }()
     
-    let setHabitTimeDatePicker: UIDatePicker = {
-        let date = UIDatePicker()
-        date.translatesAutoresizingMaskIntoConstraints = false
-        date.datePickerMode = .countDownTimer
-        date.date = Date()
-        return date
-    }()
-    
     let timeHabitLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         label.textColor = buttonColor
         return label
+    }()
+    
+    let setHabitTimeDatePicker: UIDatePicker = {
+        let date = UIDatePicker()
+        date.translatesAutoresizingMaskIntoConstraints = false
+        date.datePickerMode = .countDownTimer
+        date.date = Date()
+        return date
     }()
     
     let deleteHabitButton: UIButton = {
@@ -186,13 +186,8 @@ extension HabitViewController {
             return print("no such index!")
         }
         store.habits.remove(at: indexOfHabit)
-        print("habit deleted")
-        
-        let habitsVC = HabitsViewController()
-        let habitsNavVC = UINavigationController(rootViewController: habitsVC)
-        habitsNavVC.modalPresentationStyle = .fullScreen
-        habitsNavVC.modalTransitionStyle = .flipHorizontal
-        self.present(habitsNavVC, animated: true, completion: nil)
+        print("habit \"\(currentHabit.name)\" has been deleted")
+        self.dismiss(animated: true, completion: nil)
     }
     
     @objc private func saveHabit() {
@@ -219,17 +214,11 @@ extension HabitViewController {
             store.habits.remove(at: indexOfHabit)
             store.habits.insert(newHabit, at: indexOfHabit)
         }
-        
-        let habitsVC = HabitsViewController()
-        let habitsNavVC = UINavigationController(rootViewController: habitsVC)
-        habitsNavVC.modalPresentationStyle = .fullScreen
-        habitsNavVC.modalTransitionStyle = .flipHorizontal
-        
-        self.present(habitsNavVC, animated: true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
     @objc private func cancelAdding() {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 }
 
@@ -245,8 +234,8 @@ extension HabitViewController {
         contentView.addSubview(colorHabitView)
         contentView.addSubview(timeTitleHabitLabel)
         contentView.addSubview(timeSubtitleHabitLabel)
-        contentView.addSubview(setHabitTimeDatePicker)
         contentView.addSubview(timeHabitLabel)
+        contentView.addSubview(setHabitTimeDatePicker)
         contentView.addSubview(deleteHabitButton)
         
         let constraints = [

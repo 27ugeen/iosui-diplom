@@ -30,7 +30,16 @@ class HabitCollectionViewCell: UICollectionViewCell {
     let counterLable: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Счетчик: 0"
+        label.text = "Счетчик: "
+        label.textColor = .systemGray2
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        return label
+    }()
+    
+    var counterNumber: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "0"
         label.textColor = .systemGray2
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         return label
@@ -68,10 +77,11 @@ extension HabitCollectionViewCell {
         
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 8
-
+        
         contentView.addSubview(titleLable)
         contentView.addSubview(subtitleLable)
         contentView.addSubview(counterLable)
+        contentView.addSubview(counterNumber)
         contentView.addSubview(statusButton)
         
         let constraints = [
@@ -90,6 +100,11 @@ extension HabitCollectionViewCell {
             counterLable.topAnchor.constraint(equalTo: subtitleLable.bottomAnchor, constant: 30),
             counterLable.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
             counterLable.heightAnchor.constraint(equalToConstant: 18),
+            
+            counterNumber.leadingAnchor.constraint(equalTo: counterLable.trailingAnchor),
+            counterNumber.topAnchor.constraint(equalTo: subtitleLable.bottomAnchor, constant: 30),
+            counterNumber.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
+            counterNumber.heightAnchor.constraint(equalToConstant: 18),
             
             statusButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 46),
             statusButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),

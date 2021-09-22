@@ -28,11 +28,19 @@ class HabitDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBar.prefersLargeTitles = false
-        self.navigationController?.navigationItem.largeTitleDisplayMode = .never
+        navigationItem.largeTitleDisplayMode = .never
         
         setupTableView()
         setupConstraints()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+//        navigationItem.largeTitleDisplayMode = .never
+        
+        if !store.habits.contains(currentHabit) {
+            self.navigationController?.popToRootViewController(animated: true)
+        }
     }
     
     @objc private func editHabit() {
@@ -46,7 +54,6 @@ class HabitDetailsViewController: UIViewController {
         
         let habitNavVC = UINavigationController(rootViewController: habitVC)
         habitNavVC.modalPresentationStyle = .fullScreen
-        habitNavVC.modalTransitionStyle = .coverVertical
         self.present(habitNavVC, animated: true, completion: nil)
     }
 }
@@ -93,16 +100,17 @@ extension HabitDetailsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! HabitDetailsTableViewCell
-        let sortedDates = store.dates.sorted { $0 > $1 }
         
         if let dateString = store.trackDateString(forIndex: indexPath.row) {
             cell.dateLabel.text = dateString
         }
         
+        let sortedDates = store.dates.sorted { $0 > $1 }
         if store.habit(currentHabit, isTrackedIn: sortedDates[indexPath.row]) {
             cell.accessoryType = .checkmark
             cell.tintColor = buttonColor
         }
+        
         return cell
     }
     
