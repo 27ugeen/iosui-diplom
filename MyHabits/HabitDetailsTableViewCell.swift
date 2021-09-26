@@ -13,7 +13,7 @@ class HabitDetailsTableViewCell: UITableViewCell {
         let title = UILabel()
         title.translatesAutoresizingMaskIntoConstraints = false
         title.text = "АКТИВНОСТЬ"
-        title.textColor = UIColor(rgb: 0x3C3C4399).withAlphaComponent(0.6)
+        title.textColor = UIColor(rgb: 0x3C3C43).withAlphaComponent(0.6)
         title.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         title.numberOfLines = 0
         return title

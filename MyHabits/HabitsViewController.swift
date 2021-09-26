@@ -17,7 +17,7 @@ class HabitsViewController: UIViewController {
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = UIColor(rgb: 0xF2F2F7)
+        collectionView.backgroundColor = mainBackgroundColor
         
         collectionView.register(ProgressCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: ProgressCollectionViewCell.self))
         collectionView.register(HabitCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: HabitCollectionViewCell.self))
@@ -47,7 +47,7 @@ class HabitsViewController: UIViewController {
 
 extension HabitsViewController {
     func setupViews() {
-        view.backgroundColor = UIColor(rgb: 0xFFFFFF)
+        view.backgroundColor = secondBackgroundColor
         
         self.navigationItem.title = "Сегодня"
         self.tabBarItem.title = "Привычки"
@@ -132,6 +132,7 @@ extension HabitsViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: HabitCollectionViewCell.self), for: indexPath) as! HabitCollectionViewCell
             
             cell.titleLable.text = store.habits[indexPath.item].name
+            cell.titleLable.textColor = store.habits[indexPath.item].color
             cell.subtitleLable.text = store.habits[indexPath.item].dateString
             cell.statusButton.tintColor = store.habits[indexPath.item].color
             cell.statusButton.tag = indexPath.item

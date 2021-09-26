@@ -13,8 +13,8 @@ class ProgressCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Всё получится!"
-        label.textColor = .systemGray
-        label.font = UIFont.systemFont(ofSize: 13, weight: .bold)
+        label.textColor = mainLabelTextColor
+        label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
         return label
     }()
     
@@ -22,8 +22,8 @@ class ProgressCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "50%"
-        label.textColor = .systemGray
-        label.font = UIFont.systemFont(ofSize: 13, weight: .bold)
+        label.textColor = mainLabelTextColor
+        label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
         return label
     }()
     

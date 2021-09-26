@@ -10,6 +10,12 @@ import Foundation
 import UIKit
 
 public let buttonColor = UIColor(rgb: 0xA116CC)
+public let appMainTextColor = UIColor(rgb: 0x000000)
+public let mainBackgroundColor = UIColor(rgb: 0xF2F2F7)
+public let secondBackgroundColor = UIColor(rgb: 0xFFFFFF)
+public let mainLabelTextColor = UIColor(rgb: 0x8E8E93)
+public let secondLabelTextColor = UIColor(rgb: 0xAEAEB2)
+public let headLineColor = UIColor(rgb: 0x296DFF)
 
 
 extension UIColor {

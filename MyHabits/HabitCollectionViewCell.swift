@@ -15,8 +15,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 2
-        label.textColor = UIColor(rgb: 0x296DFF)
-        label.font = UIFont.systemFont(ofSize: 17, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         label.sizeToFit()
         return label
     }()
@@ -24,8 +23,8 @@ class HabitCollectionViewCell: UICollectionViewCell {
     let subtitleLable: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .systemGray2
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.textColor = secondLabelTextColor
+        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         return label
     }()
     
@@ -33,8 +32,8 @@ class HabitCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Счетчик: "
-        label.textColor = .systemGray2
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.textColor = mainLabelTextColor
+        label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
         return label
     }()
     
@@ -42,8 +41,8 @@ class HabitCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "0"
-        label.textColor = .systemGray2
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.textColor = mainLabelTextColor
+        label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
         return label
     }()
     

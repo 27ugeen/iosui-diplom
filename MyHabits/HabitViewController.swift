@@ -30,15 +30,15 @@ class HabitViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "НАЗВАНИЕ"
         label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
-        label.textColor = UIColor(rgb: 0x000000)
+        label.textColor = appMainTextColor
         return label
     }()
     
     let addHabitTextField: UITextField = {
         let text = UITextField()
         text.translatesAutoresizingMaskIntoConstraints = false
-        text.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        text.tintColor = UIColor(rgb: 0x296DFF)
+        text.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+        text.textColor = headLineColor
         text.placeholder = "Бегать по утрам, спать 8 часов и т.п."
         text.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: text.frame.height))
         text.leftViewMode = .always
@@ -50,7 +50,7 @@ class HabitViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "ЦВЕТ"
         label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
-        label.textColor = UIColor(rgb: 0x000000)
+        label.textColor = appMainTextColor
         return label
     }()
     
@@ -69,7 +69,7 @@ class HabitViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "ВРЕМЯ"
         label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
-        label.textColor = UIColor(rgb: 0x000000)
+        label.textColor = appMainTextColor
         return label
     }()
     
@@ -78,7 +78,7 @@ class HabitViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Каждый день в "
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        label.textColor = UIColor(rgb: 0x000000)
+        label.textColor = appMainTextColor
         return label
     }()
     
@@ -123,7 +123,6 @@ class HabitViewController: UIViewController {
         self.colorHabitView.addGestureRecognizer(tapGestureOnColorWheel)
         
         setupView()
-//        setupStackView()
         setupConstraints()
     }
     
@@ -144,7 +143,7 @@ class HabitViewController: UIViewController {
 
 extension HabitViewController {
     func setupView() {
-        view.backgroundColor = UIColor(rgb: 0xFFFFFF)
+        view.backgroundColor = secondBackgroundColor
         
         if (addHabitTextField.text?.isEmpty ?? false) {
             deleteHabitButton.alpha = 0
@@ -155,8 +154,8 @@ extension HabitViewController {
         let buttonSave = UIBarButtonItem(title: "Сохранить", style: .done, target: self, action: #selector(saveHabit))
         let buttonCancel = UIBarButtonItem(title: "Отменить", style: .plain, target: self, action: #selector(cancelAdding))
         
-        buttonSave.tintColor = UIColor(rgb: 0xA116CC)
-        buttonCancel.tintColor = buttonSave.tintColor
+        buttonSave.tintColor = buttonColor
+        buttonCancel.tintColor = buttonColor
         
         self.navigationItem.setRightBarButtonItems([buttonSave], animated: true)
         self.navigationItem.setLeftBarButtonItems([buttonCancel], animated: true)
@@ -263,6 +262,7 @@ extension HabitViewController {
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
             
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 21),
@@ -286,7 +286,6 @@ extension HabitViewController {
             setHabitTimeDatePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
             deleteHabitButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            deleteHabitButton.topAnchor.constraint(equalTo: setHabitTimeDatePicker.bottomAnchor, constant: 240),
             deleteHabitButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             deleteHabitButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -18),
             deleteHabitButton.heightAnchor.constraint(equalToConstant: 22)

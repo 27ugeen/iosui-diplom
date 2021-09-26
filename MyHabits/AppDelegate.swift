@@ -12,7 +12,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        UITabBar.appearance().tintColor = UIColor(rgb: 0xA116CC)
+        UITabBar.appearance().tintColor = buttonColor
     
         return true
     }

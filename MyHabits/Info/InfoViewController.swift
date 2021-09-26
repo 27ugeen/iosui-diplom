@@ -25,8 +25,8 @@ class InfoViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Привычка за 21 день"
-        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        label.textColor = UIColor(rgb: 0x000000)
+        label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        label.textColor = appMainTextColor
         return label
     }()
     
@@ -36,7 +36,7 @@ class InfoViewController: UIViewController {
         label.numberOfLines = 0
         label.text = "Прохождение этапов, за которые за 21 день вырабатывается привычка, подчиняется следующему алгоритму:"
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        label.textColor = UIColor(rgb: 0x000000)
+        label.textColor = appMainTextColor
         return label
     }()
     
@@ -62,7 +62,7 @@ class InfoViewController: UIViewController {
             
             """
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        label.textColor = UIColor(rgb: 0x000000)
+        label.textColor = appMainTextColor
         return label
     }()
 
@@ -75,7 +75,7 @@ class InfoViewController: UIViewController {
 
 extension InfoViewController {
     func setupViews() {
-        view.backgroundColor = UIColor(rgb: 0xFFFFFF)
+        view.backgroundColor = secondBackgroundColor
         
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)

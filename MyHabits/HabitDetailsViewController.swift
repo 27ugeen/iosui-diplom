@@ -59,7 +59,7 @@ class HabitDetailsViewController: UIViewController {
 
 extension HabitDetailsViewController {
     func setupTableView() {
-        view.backgroundColor = UIColor(rgb: 0xF2F2F7)
+        view.backgroundColor = mainBackgroundColor
         
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -104,11 +104,11 @@ extension HabitDetailsViewController: UITableViewDataSource {
         }
         
         let sortedDates = store.dates.sorted { $0 > $1 }
+        
         if store.habit(currentHabit, isTrackedIn: sortedDates[indexPath.row]) {
             cell.accessoryType = .checkmark
             cell.tintColor = buttonColor
         }
-        
         return cell
     }
     
