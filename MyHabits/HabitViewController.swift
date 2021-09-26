@@ -123,6 +123,7 @@ class HabitViewController: UIViewController {
         self.colorHabitView.addGestureRecognizer(tapGestureOnColorWheel)
         
         setupView()
+//        setupStackView()
         setupConstraints()
     }
     
@@ -160,7 +161,9 @@ extension HabitViewController {
         self.navigationItem.setRightBarButtonItems([buttonSave], animated: true)
         self.navigationItem.setLeftBarButtonItems([buttonCancel], animated: true)
     }
-    
+}
+
+extension HabitViewController {
     @objc func setupAlert() {
         let alert = UIAlertController(title: "Удалить привычку", message: "Вы хотите удалить привычку \"\(currentHabit.name)\" ?", preferredStyle: UIAlertController.Style.alert)
         
@@ -181,7 +184,7 @@ extension HabitViewController {
         self.present(colorPicker, animated: true, completion: nil )
     }
     
-    @objc func deleteHabit() {
+    @objc private func deleteHabit() {
         guard let indexOfHabit = store.habits.firstIndex(of: currentHabit) else {
             return print("no such index!")
         }
@@ -218,7 +221,7 @@ extension HabitViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
-    @objc private func cancelAdding() {
+    @objc func cancelAdding() {
         dismiss(animated: true, completion: nil)
     }
 }
@@ -229,9 +232,18 @@ extension HabitViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        contentView.addSubview(nameHabitLabel)
-        contentView.addSubview(addHabitTextField)
-        contentView.addSubview(colorTitleHabitLabel)
+        let stackView = UIStackView(arrangedSubviews: [
+            self.nameHabitLabel,
+            self.addHabitTextField,
+            self.colorTitleHabitLabel
+        ])
+
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.setCustomSpacing(7, after: nameHabitLabel)
+        stackView.setCustomSpacing(15, after: addHabitTextField)
+
+        contentView.addSubview(stackView)
         contentView.addSubview(colorHabitView)
         contentView.addSubview(timeTitleHabitLabel)
         contentView.addSubview(timeSubtitleHabitLabel)
@@ -252,17 +264,11 @@ extension HabitViewController {
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
-            nameHabitLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            nameHabitLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 21),
-            
-            addHabitTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
-            addHabitTextField.topAnchor.constraint(equalTo: nameHabitLabel.bottomAnchor, constant: 7),
-            
-            colorTitleHabitLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            colorTitleHabitLabel.topAnchor.constraint(equalTo: addHabitTextField.bottomAnchor, constant: 15),
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 21),
             
             colorHabitView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            colorHabitView.topAnchor.constraint(equalTo: colorTitleHabitLabel.bottomAnchor, constant: 7),
+            colorHabitView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 7),
             colorHabitView.widthAnchor.constraint(equalToConstant: 30),
             colorHabitView.heightAnchor.constraint(equalToConstant: 30),
             
