@@ -46,7 +46,8 @@ class HabitDetailsViewController: UIViewController {
         let habitVC = HabitViewController(habit: currentHabit)
         habitVC.title = "Править"
         
-        habitVC.addHabitTextField.text = currentHabit.name
+        habitVC.addHabitTextView.text = currentHabit.name
+        habitVC.addHabitTextView.placeholder = ""
         habitVC.colorHabitView.backgroundColor = currentHabit.color
         habitVC.timeHabitLabel.text = String(currentHabit.dateString.dropFirst(14))
         habitVC.setHabitTimeDatePicker.date = currentHabit.date

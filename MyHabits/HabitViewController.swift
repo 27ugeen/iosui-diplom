@@ -34,14 +34,16 @@ class HabitViewController: UIViewController {
         return label
     }()
     
-    let addHabitTextField: UITextField = {
-        let text = UITextField()
+    let addHabitTextView: UITextView = {
+        let text = UITextView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width - 32, height: 0))
         text.translatesAutoresizingMaskIntoConstraints = false
         text.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         text.textColor = headLineColor
         text.placeholder = "Бегать по утрам, спать 8 часов и т.п."
-        text.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: text.frame.height))
-        text.leftViewMode = .always
+        text.isScrollEnabled = false
+        text.isUserInteractionEnabled = true;
+        text.isEditable = true;
+        text.sizeToFit()
         return text
     }()
     
@@ -145,7 +147,7 @@ extension HabitViewController {
     func setupView() {
         view.backgroundColor = secondBackgroundColor
         
-        if (addHabitTextField.text?.isEmpty ?? false) {
+        if (addHabitTextView.text?.isEmpty ?? false) {
             deleteHabitButton.alpha = 0
         } else {
             deleteHabitButton.alpha = 1
@@ -193,11 +195,11 @@ extension HabitViewController {
     }
     
     @objc private func saveHabit() {
-        let newHabit = Habit(name: addHabitTextField.text ?? "No name",
+        let newHabit = Habit(name: addHabitTextView.text ?? "No name",
                              date: setHabitTimeDatePicker.date,
                              color: colorHabitView.backgroundColor ?? .systemOrange)
         
-        let isEmptyHabitName = addHabitTextField.text?.isEmpty ?? false
+        let isEmptyHabitName = addHabitTextView.text?.isEmpty ?? false
         
         if isEmptyHabitName {
             let alert = UIAlertController(title: "Внимание!", message: "Внесите название привычки!", preferredStyle: UIAlertController.Style.alert)
@@ -233,14 +235,14 @@ extension HabitViewController {
         
         let stackView = UIStackView(arrangedSubviews: [
             self.nameHabitLabel,
-            self.addHabitTextField,
+            self.addHabitTextView,
             self.colorTitleHabitLabel
         ])
 
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-        stackView.setCustomSpacing(7, after: nameHabitLabel)
-        stackView.setCustomSpacing(15, after: addHabitTextField)
+        stackView.setCustomSpacing(2, after: nameHabitLabel)
+        stackView.setCustomSpacing(6, after: addHabitTextView)
 
         contentView.addSubview(stackView)
         contentView.addSubview(colorHabitView)
@@ -263,6 +265,8 @@ extension HabitViewController {
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
+            
+            addHabitTextView.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -32),
             
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 21),
@@ -316,4 +320,76 @@ private extension HabitViewController {
         scrollView.contentInset.bottom = .zero
         scrollView.verticalScrollIndicatorInsets = .zero
     }
+}
+
+/// Extend UITextView and implemented UITextViewDelegate to listen for changes
+extension UITextView: UITextViewDelegate {
+    
+    /// Resize the placeholder when the UITextView bounds change
+    override open var bounds: CGRect {
+        didSet {
+            self.resizePlaceholder()
+        }
+    }
+    
+    /// The UITextView placeholder text
+    public var placeholder: String? {
+        get {
+            var placeholderText: String?
+            
+            if let placeholderLabel = self.viewWithTag(100) as? UILabel {
+                placeholderText = placeholderLabel.text
+            }
+            
+            return placeholderText
+        }
+        set {
+            if let placeholderLabel = self.viewWithTag(100) as! UILabel? {
+                placeholderLabel.text = newValue
+                placeholderLabel.sizeToFit()
+            } else {
+                self.addPlaceholder(newValue!)
+            }
+        }
+    }
+    
+    /// When the UITextView did change, show or hide the label based on if the UITextView is empty or not
+    ///
+    /// - Parameter textView: The UITextView that got updated
+    public func textViewDidChange(_ textView: UITextView) {
+        if let placeholderLabel = self.viewWithTag(100) as? UILabel {
+            placeholderLabel.isHidden = !self.text.isEmpty
+        }
+    }
+    
+    /// Resize the placeholder UILabel to make sure it's in the same position as the UITextView text
+    private func resizePlaceholder() {
+        if let placeholderLabel = self.viewWithTag(100) as! UILabel? {
+            let labelX = self.textContainer.lineFragmentPadding
+            let labelY = self.textContainerInset.top - 2
+            let labelWidth = self.frame.width - (labelX * 2)
+            let labelHeight = placeholderLabel.frame.height
+
+            placeholderLabel.frame = CGRect(x: labelX, y: labelY, width: labelWidth, height: labelHeight)
+        }
+    }
+    
+    /// Adds a placeholder UILabel to this UITextView
+    private func addPlaceholder(_ placeholderText: String) {
+        let placeholderLabel = UILabel()
+        
+        placeholderLabel.text = placeholderText
+        placeholderLabel.sizeToFit()
+        
+        placeholderLabel.font = self.font
+        placeholderLabel.textColor = UIColor.lightGray
+        placeholderLabel.tag = 100
+        
+        placeholderLabel.isHidden = !self.text.isEmpty
+        
+        self.addSubview(placeholderLabel)
+        self.resizePlaceholder()
+        self.delegate = self
+    }
+    
 }
