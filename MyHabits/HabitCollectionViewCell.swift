@@ -14,8 +14,10 @@ class HabitCollectionViewCell: UICollectionViewCell {
     let titleLable: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 2
         label.textColor = UIColor(rgb: 0x296DFF)
         label.font = UIFont.systemFont(ofSize: 17, weight: .medium)
+        label.sizeToFit()
         return label
     }()
     
@@ -85,28 +87,24 @@ extension HabitCollectionViewCell {
         contentView.addSubview(statusButton)
         
         let constraints = [
-            
-            contentView.widthAnchor.constraint(equalToConstant: CGFloat(UIScreen.main.bounds.width - 32)),
+            contentView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+            contentView.heightAnchor.constraint(equalToConstant: 130),
             
             titleLable.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             titleLable.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            titleLable.heightAnchor.constraint(equalToConstant: 22),
+            titleLable.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -63),
             
             subtitleLable.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             subtitleLable.topAnchor.constraint(equalTo: titleLable.bottomAnchor, constant: 4),
-            subtitleLable.heightAnchor.constraint(equalToConstant: 16),
             
             counterLable.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            counterLable.topAnchor.constraint(equalTo: subtitleLable.bottomAnchor, constant: 30),
             counterLable.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
-            counterLable.heightAnchor.constraint(equalToConstant: 18),
             
             counterNumber.leadingAnchor.constraint(equalTo: counterLable.trailingAnchor),
-            counterNumber.topAnchor.constraint(equalTo: subtitleLable.bottomAnchor, constant: 30),
             counterNumber.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
-            counterNumber.heightAnchor.constraint(equalToConstant: 18),
             
-            statusButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 46),
+            statusButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             statusButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),
             statusButton.widthAnchor.constraint(equalToConstant: 38),
             statusButton.heightAnchor.constraint(equalToConstant: 38),

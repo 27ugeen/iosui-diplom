@@ -15,7 +15,6 @@ class ProgressCollectionViewCell: UICollectionViewCell {
         label.text = "Всё получится!"
         label.textColor = .systemGray
         label.font = UIFont.systemFont(ofSize: 13, weight: .bold)
-        label.numberOfLines = 0
         return label
     }()
     
@@ -25,7 +24,6 @@ class ProgressCollectionViewCell: UICollectionViewCell {
         label.text = "50%"
         label.textColor = .systemGray
         label.font = UIFont.systemFont(ofSize: 13, weight: .bold)
-        label.numberOfLines = 0
         return label
     }()
     
@@ -61,16 +59,14 @@ extension ProgressCollectionViewCell {
         
         let constraints = [
             
-            contentView.widthAnchor.constraint(equalToConstant: CGFloat(UIScreen.main.bounds.width - 32)),
+            contentView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
             
             titleLable.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
             titleLable.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            titleLable.heightAnchor.constraint(equalToConstant: 18),
-            
             
             percentLable.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             percentLable.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
-            percentLable.heightAnchor.constraint(equalToConstant: 18),
             
             progressImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
             progressImageView.topAnchor.constraint(equalTo: titleLable.bottomAnchor, constant: 10),

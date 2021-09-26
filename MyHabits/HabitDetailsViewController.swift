@@ -36,7 +36,6 @@ class HabitDetailsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        navigationItem.largeTitleDisplayMode = .never
         
         if !store.habits.contains(currentHabit) {
             self.navigationController?.popToRootViewController(animated: true)
@@ -97,7 +96,6 @@ extension HabitDetailsViewController: UITableViewDataSource {
         return store.dates.count
     }
     
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! HabitDetailsTableViewCell
         
@@ -118,7 +116,6 @@ extension HabitDetailsViewController: UITableViewDataSource {
         let cell = HabitDetailsTableViewCell()
         return cell.habitDetailsTitleLabel.text
     }
-    
 }
 
 extension HabitDetailsViewController: UITableViewDelegate {

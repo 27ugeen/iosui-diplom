@@ -211,6 +211,7 @@ extension HabitViewController {
             guard let indexOfHabit = store.habits.firstIndex(of: currentHabit) else {
                 return print("no such index!")
             }
+            newHabit.trackDates = currentHabit.trackDates
             store.habits.remove(at: indexOfHabit)
             store.habits.insert(newHabit, at: indexOfHabit)
         }

@@ -36,23 +36,13 @@ class HabitsViewController: UIViewController {
         
         setupViews()
         setupConstraints()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        print("willAppear")
-//        self.navigationController?.navigationBar.prefersLargeTitles = true
-
-        navigationController?.forceUpdateNavBar()
-        
         collectionView.reloadData()
+        navigationController?.forceUpdateNavBar()
     }
-    
-//    override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        self.navigationController?.navigationBar.prefersLargeTitles = false
-//    }
 }
 
 extension HabitsViewController {
@@ -61,8 +51,6 @@ extension HabitsViewController {
         
         self.navigationItem.title = "Сегодня"
         self.tabBarItem.title = "Привычки"
-        
-        
         
         let buttonAdd = UIBarButtonItem(image: UIImage(systemName: "plus"), style: UIBarButtonItem.Style.done, target: self, action: #selector(addHabit))
         buttonAdd.tintColor = buttonColor
@@ -133,8 +121,7 @@ extension HabitsViewController: UICollectionViewDataSource {
         switch indexPath.section {
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ProgressCollectionViewCell.self), for: indexPath) as! ProgressCollectionViewCell
-            
-            let store = HabitsStore.shared
+
             cell.percentLable.text = "\(String(describing: Int(store.todayProgress * 100)))%"
             cell.progressImageView.setProgress( 0, animated: false)
             cell.progressImageView.progress = store.todayProgress
@@ -148,7 +135,6 @@ extension HabitsViewController: UICollectionViewDataSource {
             cell.subtitleLable.text = store.habits[indexPath.item].dateString
             cell.statusButton.tintColor = store.habits[indexPath.item].color
             cell.statusButton.tag = indexPath.item
-            
             cell.counterNumber.text = String(describing: store.habits[indexPath.item].trackDates.count)
             cell.statusButton.addTarget(self, action: #selector(circleTapped), for: .touchUpInside)
             
@@ -164,8 +150,6 @@ extension HabitsViewController: UICollectionViewDataSource {
 
 extension HabitsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("indexPathItem: \(indexPath.item)")
-        
         let indexPathItem = (indexPath.section, indexPath.row)
         
         if indexPathItem != (0, 0) {
@@ -174,6 +158,7 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout {
             self.navigationController?.navigationBar.tintColor = buttonColor
             navigationController?.pushViewController(habitDetailsVC, animated: true)
         }
+        print("indexPathItem: \(indexPath.item)")
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -181,8 +166,16 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout {
         let cellHeight: CGFloat
         
         indexPath.section == 0 ? (cellHeight = 60) : (cellHeight = 130)
-        
+
         return CGSize(width: cellWidth, height: cellHeight)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 12
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 12
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
